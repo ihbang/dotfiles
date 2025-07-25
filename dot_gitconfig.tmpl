@@ -1,0 +1,22 @@
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[user]
+	name = ihbang
+	email = {{ .email | quote }}
+[core]
+	editor = {{ .editor | quote }}
+	pager = cat
+[diff]
+	noprefix = true
+[credential]
+	helper = store
+[ssh]
+	postBuffer = 524288000
+[http]
+	postBuffer = 524288000
+	version = HTTP/1.1
+[pull]
+	rebase = true
