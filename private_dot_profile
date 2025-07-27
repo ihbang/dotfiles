@@ -18,11 +18,9 @@ if [ -d "$HOME/.local/bin" ]; then
 	PATH="$HOME/.local/bin:$PATH"
 fi
 
-# change shell to zsh on devzone
-zsh_path=$(which zsh 2>/dev/null)
-if [ -f "$zsh_path" ] && [ "$SHELL" != "$zsh_path" ]; then
-    export SHELL="$zsh_path"
-    exec "$zsh_path"
+# change shell to fish on devzone
+fish_path=$(which fish 2>/dev/null)
+if [ -f "$fish_path" ] && [ "$SHELL" != "$fish_path" ]; then
+    export SHELL="$fish_path"
+    exec "$fish_path"
 fi
-
-. "$HOME/.cargo/env"
