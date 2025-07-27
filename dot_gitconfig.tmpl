@@ -3,20 +3,37 @@
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
+
 [user]
 	name = ihbang
 	email = {{ .email | quote }}
+
 [core]
 	editor = {{ .editor | quote }}
-	pager = cat
+	pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    dark = true      # or light = true, or omit for auto-detection
+
+[merge]
+    conflictstyle = zdiff3
+
 [diff]
 	noprefix = true
+
+[pull]
+	rebase = true
+
 [credential]
 	helper = store
+
 [ssh]
 	postBuffer = 524288000
+
 [http]
 	postBuffer = 524288000
 	version = HTTP/1.1
-[pull]
-	rebase = true
