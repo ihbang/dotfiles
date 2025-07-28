@@ -1,3 +1,6 @@
 README.md
 
-.tmux/resurrect
+.tmux/resurrect/
+.tmux/resurrect/**
+
+.config/fish/fish_variables
