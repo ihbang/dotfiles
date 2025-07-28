@@ -1,5 +1,0 @@
-pane	0	1	1	:*	0	login0	:/remote/vast0/inhyeok/.oh-my-zsh/custom/plugins	1	tmux	:tmux source-file /home/inhyeok/.tmux.conf
-pane	2	1	1	:*	0	[login2] ~	:/remote/vast0/inhyeok	1	zsh	:
-window	0	1	:study	1	:*	6631,354x95,0,0,12	off
-window	2	1	:zsh	1	:*	65f0,315x95,0,0,11	:
-state	0	2

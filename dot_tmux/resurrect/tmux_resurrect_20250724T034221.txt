@@ -1,5 +1,0 @@
-pane	0	1	1	:*	0	login0	:/remote/vast0/inhyeok	1	zsh	:
-pane	2	1	1	:*	0	[login2] ~	:/remote/vast0/inhyeok	1	zsh	:
-window	0	1	:zsh	1	:*	65f1,315x95,0,0,12	:
-window	2	1	:zsh	1	:*	65f0,315x95,0,0,11	:
-state	0	
