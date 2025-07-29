@@ -1,0 +1,13 @@
+# Language Runtimes
+rust latest
+
+# Rust-based Tools
+ripgrep latest
+bat latest
+fd latest
+delta latest
+
+# Other CLI Tools
+neovim latest
+fzf latest
+lazygit latest
