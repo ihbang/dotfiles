@@ -42,6 +42,8 @@
 {{-   $versionString := $versionOutput | regexFind "[0-9]+\\.[0-9]+\\.[0-9]+" -}}
 {{-   if and $versionString (semverCompare ">= 2.35.0" $versionString) }}
   conflictstyle = zdiff3
+{{-   else }}
+  conflictstyle = diff3
 {{-   end }}
 {{- else -}}
   conflictstyle = diff3
