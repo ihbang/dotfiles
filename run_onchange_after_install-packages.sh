@@ -56,7 +56,32 @@ fi
 
 echo "All essential dependencies are met."
 
-# --- 2. Install asdf and all tools defined in .tool-versions ---
+# --- 2. Install Rust Environment via rustup ---
+echo "--> Step 2: Setting up Rust environment..."
+if ! command_exists "cargo"; then
+  echo "Installing rustup (which includes rustc and cargo)..."
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y
+else
+  echo "Rust environment (cargo) is already installed."
+fi
+# Source cargo env to make it available in the current script
+. "$HOME/.cargo/env"
+
+# --- 3. Install Rust-based tools via cargo ---
+echo "--> Step 3: Installing Rust-based tools via cargo..."
+CARGO_TOOLS="ripgrep:rg bat:bat fd-find:fd git-delta:delta"
+for tool_info in $CARGO_TOOLS; do
+  pkg_name=$(echo "$tool_info" | cut -d: -f1)
+  cmd_name=$(echo "$tool_info" | cut -d: -f2)
+  if ! command_exists "$cmd_name"; then
+    echo "Installing $pkg_name via cargo..."
+    cargo install "$pkg_name"
+  else
+    echo "$cmd_name is already installed. Skipping."
+  fi
+done
+
+# --- 4. Install asdf and all tools defined in .tool-versions ---
 echo "--> Step 2: Setting up asdf version manager..."
 ASDF_DIR="$HOME/.asdf"
 ASDF_VERSION="v0.18.0"
