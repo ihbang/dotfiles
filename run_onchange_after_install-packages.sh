@@ -30,6 +30,17 @@ for item in $ESSENTIALS; do
   fi
 done
 
+# Check for optional but recommended tools
+RECOMMENDED="fish:fish"
+for item in $RECOMMENDED; do
+  cmd=$(echo "$item" | cut -d: -f1)
+  pkg=$(echo "$item" | cut -d: -f2)
+  if ! command_exists "$cmd"; then
+    echo "Warning: Recommended tool '$cmd' is not found."
+    echo "         For the best experience, please install it manually (e.g., sudo apt install $pkg)."
+  fi
+done
+
 # On Linux, extra build libraries are often needed.
 if [ "$(uname)" = "Linux" ]; then
   # We can't easily check for library headers, so we inform the user.
@@ -73,6 +84,7 @@ else
       echo "Incorrect asdf version ($current_version) found. Expected $ASDF_VERSION. Re-installing..."
       rm -rf "$asdf_bin"
       install_asdf=true
+    fi
   else
     install_asdf=true
   fi
