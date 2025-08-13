@@ -1,4 +1,6 @@
-{{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $email := promptStringOnce . "email" "Email address for github account" -}}
+
+encryption = "age"
 
 [git]
 autoCommit = true
@@ -7,3 +9,8 @@ autoPush = true
 [data]
 email = {{ $email | quote }}
 editor = "nvim"
+
+[age]
+command = "rage"
+identity = "/home/inhyeok/key.txt"
+recipient = "age13nfa30unz0dsk2kp78yg99h0qwwj2dzhhxlc692j9x2dke52tdfsr74uey"
