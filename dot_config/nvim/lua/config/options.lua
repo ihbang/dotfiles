@@ -5,4 +5,3 @@
 local opt = vim.opt
 
 opt.scrolloff = 999
-opt.sidescrolloff = 999
