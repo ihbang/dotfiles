@@ -6,7 +6,7 @@ alias k "kubectl -n cluster"
 alias setkube "set -gx KUBECONFIG $(pwd)/kubeconfig.yaml"
 
 ## run inference service
-function krunpd
+function krun
     if test (count $argv) -ne 2
         echo "Usage: krun <prefill_replicas> <decode_replicas>"
         return 1
@@ -17,7 +17,7 @@ function krunpd
 
     echo "Deploying inference-service with prefill=$prefill_replicas, decode=$decode_replicas"
     helm upgrade -i inference-service moreh/inference-service \
-        --version v0.3.1 \
+        --version v0.6.1 \
         -n cluster \
         -f inference-service-values.yaml \
         --set prefill.replicas=$prefill_replicas \
