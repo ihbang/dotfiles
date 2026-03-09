@@ -1,9 +1,9 @@
 # k8s
-alias k "kubectl -n $KUBENS"
-alias ka "k apply -f"
-alias kdel "k delete"
-alias kget "k get -o wide"
-alias setkube "set -gx KUBECONFIG $(pwd)/kubeconfig.yaml"
+abbr k "kubectl -n $KUBENS"
+abbr ka "kubectl -n $KUBENS apply -f"
+abbr kdel "kubectl -n $KUBENS delete"
+abbr kget "kubectl -n $KUBENS get -o wide"
+abbr setkube "set -gx KUBECONFIG $(pwd)/kubeconfig.yaml"
 
 function helm_reinstall
     if test (count $argv) -eq 1
