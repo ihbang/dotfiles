@@ -1,0 +1,19 @@
+# Environment variables
+export EDITOR=nvim
+export BAT_THEME=Dracula
+
+export PATH="$PATH:$HOME/.krew/bin:$HOME/.opencode/bin"
+export KUBECONFIG="$HOME/mif/kubeconfig.yaml"
+export KUBENS=inhyeok
+
+# Cargo
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+
+# Load conf.d
+for f in "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/conf.d"/*.zsh; do
+  [ -f "$f" ] && source "$f"
+done
