@@ -1,7 +1,5 @@
 #!/bin/bash
-# Install development tools:
-#   binaries -> ~/.local  : neovim, fzf
-#   cargo packages        : ripgrep, bat, git-delta
+# Install binary tools to ~/.local: neovim, fzf
 
 INSTALL_PREFIX="$HOME/.local"
 mkdir -p "$INSTALL_PREFIX/bin"
@@ -80,37 +78,7 @@ install_fzf() {
   echo "fzf installed to $INSTALL_PREFIX/bin/fzf"
 }
 
-# ── cargo packages ────────────────────────────────────────────────────────────
-
-install_cargo_packages() {
-  # Source cargo env in case it was just installed by install-rust.sh
-  [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
-
-  if ! command -v cargo > /dev/null 2>&1; then
-    echo "cargo not found — skipping ripgrep, bat, git-delta"
-    return 0
-  fi
-
-  # pkg -> binary name
-  declare -A packages=(
-    [ripgrep]=rg
-    [bat]=bat
-    [git-delta]=delta
-  )
-
-  for pkg in "${!packages[@]}"; do
-    local bin="${packages[$pkg]}"
-    if command -v "$bin" > /dev/null 2>&1; then
-      echo "$pkg is already installed: $(command -v "$bin")"
-    else
-      echo "Installing $pkg via cargo..."
-      cargo install "$pkg"
-    fi
-  done
-}
-
 # ── main ──────────────────────────────────────────────────────────────────────
 
 install_neovim
 install_fzf
-install_cargo_packages
