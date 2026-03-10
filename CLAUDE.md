@@ -2,67 +2,71 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## What this repo is
+## What This Repo Is
 
-A [chezmoi](https://www.chezmoi.io/) dotfiles repository. Chezmoi manages dotfiles across machines by maintaining a source directory (`~/.local/share/chezmoi`) that maps to actual home directory files.
+A [chezmoi](https://chezmoi.io) dotfiles repository. Chezmoi manages dotfiles by mapping source files to target locations in `$HOME`. Changes here are applied by running `chezmoi apply`.
 
-## chezmoi commands
+## Key Commands
 
 ```sh
-chezmoi apply          # apply changes from source to home directory
-chezmoi diff           # show what apply would change
-chezmoi add <file>     # track a new dotfile
-chezmoi edit <file>    # edit a tracked dotfile (opens source file)
-chezmoi re-add         # update source from home directory if you edited files directly
-chezmoi data           # show template data (e.g., .email, .editor values)
+# Apply all dotfiles to $HOME
+chezmoi apply
+
+# Preview what would change before applying
+chezmoi diff
+
+# Edit a managed file (opens in $EDITOR, auto-applies on save)
+chezmoi edit ~/.zshrc
+
+# Add a new file to be managed
+chezmoi add ~/.some-new-config
+
+# Re-run all onchange scripts (e.g. after modifying install scripts)
+chezmoi apply --force
 ```
 
-## File naming conventions
+## File Naming Conventions
 
-chezmoi uses filename prefixes/suffixes that encode metadata:
+Chezmoi uses prefixes to encode how source files map to targets:
 
-| Prefix/Suffix | Meaning |
+| Source prefix | Meaning |
 |---|---|
-| `dot_` | maps to `.` in home dir (e.g., `dot_gitconfig` → `~/.gitconfig`) |
-| `private_` | file permissions 0600 |
-| `run_onchange_before_` | script run before apply when file content changes |
-| `.tmpl` suffix | Go template file; uses `{{ .variable }}` syntax |
+| `dot_` | Maps to `.` (e.g. `dot_zshrc` → `~/.zshrc`) |
+| `private_dot_` | Same but with mode 0600 |
+| `run_onchange_before_` | Shell script run when its content changes, before applying |
+| `.tmpl` suffix | Go template file (uses chezmoi template data) |
 
-## Repository structure
+## Repository Structure
 
-- `dot_gitconfig.tmpl` — Git config using chezmoi templates for `.email` and `.editor` variables
-- `dot_config/private_fish/` — Fish shell config (config.fish, conf.d/, fish_plugins)
-- `dot_config/nvim/` — Neovim config (LazyVim-based)
-- `dot_config/lazygit/config.yml` — Lazygit with Dracula theme
-- `dot_cargo/` — Cargo/Rust toolchain config
-- `dot_tmux*` — Tmux config
-- `private_dot_profile` — Login shell profile (switches to fish unless `$CLAUDECODE` is set)
-- `run_onchange_before_install-packages.sh` — Package installation script
+- **`dot_zshrc`** — Minimal zshrc: sets env vars, sources cargo, nvm, then loads all files from `~/.config/zsh/conf.d/*.zsh`
+- **`dot_config/zsh/conf.d/`** — Zsh configuration fragments loaded by `.zshrc`:
+  - `plugins.zsh` — oh-my-zsh setup with Dracula theme; plugins: git, fzf-tab, zsh-autosuggestions, zsh-syntax-highlighting
+  - `aliases.zsh` — `vi=nvim` alias
+  - `moreh.zsh` — Kubernetes/Helm helper functions for work (kubectl aliases, `helm_install`/`helm_uninstall`/`helm_reinstall`)
+- **`dot_gitconfig.tmpl`** — Git config template; uses `.email` and `.editor` template variables; conditionally sets `conflictstyle` based on git version
+- **`dot_tmux.conf`** — Tmux config: prefix `C-a`, vi bindings, TPM plugins (resurrect, continuum, Dracula theme)
+- **`dot_config/nvim/`** — LazyVim-based Neovim config with custom plugins in `lua/plugins/`
+- **`dot_config/lazygit/`** — Lazygit configuration
+- **`.chezmoi.toml.tmpl`** — Chezmoi config template; prompts for `email` once; enables `autoCommit` and `autoPush` (changes are committed and pushed automatically on `chezmoi apply`)
+- **`.chezmoiexternal.toml`** — External git repos managed by chezmoi: oh-my-zsh, Dracula theme, zsh-autosuggestions, zsh-syntax-highlighting, fzf-tab (refreshed weekly)
+- **`.chezmoiignore`** — Excludes README.md, tmux resurrect sessions, fish variables, swap files
 
-## Neovim setup
+## Install Scripts (run in order on content change)
 
-LazyVim with extras enabled in `dot_config/nvim/lazyvim.json`:
-- `ai.claudecode` — Claude Code integration (`<leader>a` prefix for all Claude keymaps)
-- `editor.fzf`, `editor.mini-diff`, `editor.mini-files`, `editor.mini-move`
-- `lang.clangd`, `lang.python`, `lang.rust`
-- `util.chezmoi` — chezmoi source file detection
+| Script | Purpose |
+|---|---|
+| `run_onchange_before_00_install-packages.sh` | (empty placeholder) |
+| `run_onchange_before_01_install-rust.sh` | Installs Rust via rustup if cargo not found |
+| `run_onchange_before_02_install-zsh.sh` | Builds zsh 5.9 from source to `~/.local` if not found |
+| `run_onchange_before_03_install-binaries.sh` | Downloads neovim 0.10.4 and fzf 0.57.0 binaries to `~/.local` |
+| `run_onchange_before_04_install-cargo-packages.sh` | Installs ripgrep, bat, git-delta via cargo |
 
-Custom plugins in `dot_config/nvim/lua/plugins/`:
-- `ai.lua` — claudecode.nvim keymaps (forced `SHELL=/bin/bash` for terminal)
-- `animate.lua` — disables snacks.nvim scroll animation
+## Template Data
 
-## Fish shell setup
+Defined in `.chezmoi.toml.tmpl` and used in `.tmpl` files:
+- `{{ .email }}` — Git commit email (prompted on first `chezmoi init`)
+- `{{ .editor }}` — Set to `"nvim"`
 
-Fish plugins managed via fisher (`dot_config/private_fish/fish_plugins`):
-- `dracula/fish` + `vitallium/tokyonight-fish` — themes (Dracula active)
-- `patrickf1/fzf.fish` — fzf keybindings
-- `ilancosman/tide@v6` — prompt
-- `jorgebucaran/nvm.fish` — Node version manager
+## Auto-commit Behavior
 
-Key config in `conf.d/moreh.fish`: Kubernetes/Helm workflow abbreviations and functions targeting the `moreh` Helm repo and a local kubeconfig at `~/mif/kubeconfig.yaml`.
-
-## Template variables
-
-chezmoi data variables used in templates (set via `chezmoi init` or `~/.config/chezmoi/chezmoi.toml`):
-- `.email` — Git commit email
-- `.editor` — Default editor (set to `nvim`)
+`autoCommit = true` and `autoPush = true` are set in `.chezmoi.toml.tmpl`. Every `chezmoi apply` automatically commits and pushes changes to this repo. Be intentional about what files are added/modified.
