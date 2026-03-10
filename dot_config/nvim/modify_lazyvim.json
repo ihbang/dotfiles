@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+# chezmoi modify script: sync extras/version, preserve local-only 'news' field
+import json, sys
+
+try:
+    current = json.load(sys.stdin)
+except (json.JSONDecodeError, ValueError):
+    current = {}
+
+desired = {
+    "extras": [
+        "lazyvim.plugins.extras.ai.claudecode",
+        "lazyvim.plugins.extras.editor.fzf",
+        "lazyvim.plugins.extras.editor.mini-diff",
+        "lazyvim.plugins.extras.editor.mini-files",
+        "lazyvim.plugins.extras.editor.mini-move",
+        "lazyvim.plugins.extras.lang.clangd",
+        "lazyvim.plugins.extras.lang.python",
+        "lazyvim.plugins.extras.lang.rust",
+        "lazyvim.plugins.extras.util.chezmoi"
+    ],
+    "install_version": 8,
+    "news": current.get("news", {}),
+    "version": 8
+}
+
+print(json.dumps(desired, indent=2))
