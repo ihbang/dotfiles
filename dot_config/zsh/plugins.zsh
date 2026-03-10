@@ -1,13 +1,11 @@
-export ZSH="${XDG_DATA_HOME:-$HOME/.local/share}/oh-my-zsh"
-export ZSH_CUSTOM="${XDG_DATA_HOME:-$HOME/.config/zsh}/oh-my-zsh-custom"
+ZPLUGINDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/plugins"
 
-ZSH_THEME=""  # prompt is handled by starship
+# zsh-autosuggestions
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+source "$ZPLUGINDIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
-plugins=(
-  git
-  fzf-tab
-  zsh-autosuggestions
-  zsh-syntax-highlighting  # must be last
-)
+# fzf-tab
+source "$ZPLUGINDIR/fzf-tab/fzf-tab.plugin.zsh"
 
-source "$ZSH/oh-my-zsh.sh"
+# zsh-syntax-highlighting (must be last)
+source "$ZPLUGINDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"

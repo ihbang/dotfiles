@@ -1,19 +1,14 @@
-[".local/share/oh-my-zsh"]
-  type = "git-repo"
-  url = "https://github.com/ohmyzsh/ohmyzsh.git"
-  refreshPeriod = "168h"
-
-[".config/zsh/oh-my-zsh-custom/plugins/zsh-autosuggestions"]
+[".config/zsh/plugins/zsh-autosuggestions"]
   type = "git-repo"
   url = "https://github.com/zsh-users/zsh-autosuggestions.git"
   refreshPeriod = "168h"
 
-[".config/zsh/oh-my-zsh-custom/plugins/zsh-syntax-highlighting"]
+[".config/zsh/plugins/zsh-syntax-highlighting"]
   type = "git-repo"
   url = "https://github.com/zsh-users/zsh-syntax-highlighting.git"
   refreshPeriod = "168h"
 
-[".config/zsh/oh-my-zsh-custom/plugins/fzf-tab"]
+[".config/zsh/plugins/fzf-tab"]
   type = "git-repo"
   url = "https://github.com/Aloxaf/fzf-tab.git"
   refreshPeriod = "168h"
