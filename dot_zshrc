@@ -13,8 +13,8 @@ export KUBENS=inhyeok
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
 
-# Load conf.d
-for f in "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/conf.d"/*.zsh; do
+# Load zsh configs
+for f in "${XDG_CONFIG_HOME:-$HOME/.config}/zsh"/*.zsh; do
   [ -f "$f" ] && source "$f"
 done
 
