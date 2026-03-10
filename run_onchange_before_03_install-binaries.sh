@@ -15,7 +15,6 @@ install_neovim() {
     return 0
   fi
 
-  local version="0.10.4"
   local asset
 
   case "$OS-$ARCH" in
@@ -30,9 +29,9 @@ install_neovim() {
   tmp=$(mktemp -d)
   trap 'rm -rf "$tmp"' RETURN
 
-  echo "Installing neovim ${version}..."
+  echo "Installing neovim (latest)..."
   curl -fsSL \
-    "https://github.com/neovim/neovim/releases/download/v${version}/${asset}" \
+    "https://github.com/neovim/neovim/releases/latest/download/${asset}" \
     -o "$tmp/nvim.tar.gz"
 
   tar -xf "$tmp/nvim.tar.gz" -C "$tmp"
@@ -53,27 +52,13 @@ install_fzf() {
     return 0
   fi
 
-  local version="0.57.0"
-  local asset
+  echo "Installing fzf (latest)..."
+  git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
 
-  case "$OS-$ARCH" in
-    Linux-x86_64)   asset="fzf-${version}-linux_amd64.tar.gz" ;;
-    Linux-aarch64)  asset="fzf-${version}-linux_arm64.tar.gz" ;;
-    Darwin-x86_64)  asset="fzf-${version}-darwin_amd64.tar.gz" ;;
-    Darwin-arm64)   asset="fzf-${version}-darwin_arm64.tar.gz" ;;
-    *) echo "fzf: unsupported platform $OS-$ARCH"; return 1 ;;
-  esac
+  # --bin: install binary only, skip shell integration (managed by chezmoi)
+  "$HOME/.fzf/install" --bin
 
-  local tmp
-  tmp=$(mktemp -d)
-  trap 'rm -rf "$tmp"' RETURN
-
-  echo "Installing fzf ${version}..."
-  curl -fsSL \
-    "https://github.com/junegunn/fzf/releases/download/v${version}/${asset}" \
-    -o "$tmp/fzf.tar.gz"
-
-  tar -xf "$tmp/fzf.tar.gz" -C "$INSTALL_PREFIX/bin" fzf
+  ln -sf "$HOME/.fzf/bin/fzf" "$INSTALL_PREFIX/bin/fzf"
 
   echo "fzf installed to $INSTALL_PREFIX/bin/fzf"
 }
