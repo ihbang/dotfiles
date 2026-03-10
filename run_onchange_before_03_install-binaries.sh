@@ -1,5 +1,5 @@
 #!/bin/bash
-# Install binary tools to ~/.local: neovim, fzf
+# Install binary tools to ~/.local: neovim, fzf, starship
 
 INSTALL_PREFIX="$HOME/.local"
 mkdir -p "$INSTALL_PREFIX/bin"
@@ -78,7 +78,23 @@ install_fzf() {
   echo "fzf installed to $INSTALL_PREFIX/bin/fzf"
 }
 
+# ── starship ──────────────────────────────────────────────────────────────────
+
+install_starship() {
+  if command -v starship > /dev/null 2>&1; then
+    echo "starship is already installed: $(command -v starship)"
+    return 0
+  fi
+
+  echo "Installing starship (latest)..."
+  curl -sS https://starship.rs/install.sh \
+    | sh -s -- --bin-dir "$INSTALL_PREFIX/bin" --yes
+
+  echo "starship installed to $INSTALL_PREFIX/bin/starship"
+}
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
 install_neovim
 install_fzf
+install_starship

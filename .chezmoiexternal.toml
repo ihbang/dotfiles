@@ -3,11 +3,6 @@
   url = "https://github.com/ohmyzsh/ohmyzsh.git"
   refreshPeriod = "168h"
 
-[".local/share/oh-my-zsh-custom/themes/dracula"]
-  type = "git-repo"
-  url = "https://github.com/dracula/zsh.git"
-  refreshPeriod = "168h"
-
 [".local/share/oh-my-zsh-custom/plugins/zsh-autosuggestions"]
   type = "git-repo"
   url = "https://github.com/zsh-users/zsh-autosuggestions.git"
