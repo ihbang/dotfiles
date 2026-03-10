@@ -1,5 +1,5 @@
 export ZSH="${XDG_DATA_HOME:-$HOME/.local/share}/oh-my-zsh"
-export ZSH_CUSTOM="${XDG_DATA_HOME:-$HOME/.local/share}/oh-my-zsh-custom"
+export ZSH_CUSTOM="${XDG_DATA_HOME:-$HOME/.config/zsh}/oh-my-zsh-custom"
 
 ZSH_THEME=""  # prompt is handled by starship
 
