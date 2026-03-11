@@ -5,6 +5,9 @@ export PATH="$PATH:$HOME/.krew/bin"
 export KUBECONFIG="$HOME/mif/kubeconfig.yaml"
 export KUBENS=inhyeok
 
+# LS colors
+[ -x "$(command -v dircolors)" ] && eval "$(dircolors -b)"
+
 # Cargo
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
