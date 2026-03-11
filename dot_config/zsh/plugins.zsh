@@ -7,7 +7,7 @@ autoload -U compinit && compinit
 source "$ZPLUGINDIR/fzf-tab/fzf-tab.plugin.zsh"
 
 # zsh-autosuggestions
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_STRATEGY=(history)
 source "$ZPLUGINDIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 # zsh-syntax-highlighting (must be last)
