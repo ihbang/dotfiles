@@ -126,5 +126,6 @@ Host devserver
 
 WSL은 systemd 지원이 환경마다 다르므로 수동 실행:
 ```sh
-opener --socket ~/.opener.sock &
+opener &
 ```
+소켓 경로는 `~/.config/opener/config.yaml`의 `address` 필드로 설정 (기본값: `~/.opener.sock`).
