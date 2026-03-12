@@ -19,5 +19,8 @@ done
 # fzf shell integration
 source <(fzf --zsh)
 
+# zoxide
+eval "$(zoxide init zsh)"
+
 # Starship prompt
 eval "$(starship init zsh)"
