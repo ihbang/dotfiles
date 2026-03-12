@@ -123,10 +123,10 @@ install_opener() {
 
   echo "Installing opener (latest)..."
   curl -fsSL \
-    "https://github.com/nicois/opener/releases/latest/download/${asset}" \
-    -o "$tmp/opener.zip"
+    "https://github.com/superbrothers/opener/releases/latest/download/${asset}" \
+    -o "$tmp/opener.zip" || { echo "opener: download failed"; return 1; }
 
-  unzip -o "$tmp/opener.zip" -d "$tmp"
+  unzip -o "$tmp/opener.zip" -d "$tmp" || { echo "opener: unzip failed"; return 1; }
   install -m 755 "$tmp/opener" "$INSTALL_PREFIX/bin/opener"
 
   echo "opener installed to $INSTALL_PREFIX/bin/opener"
