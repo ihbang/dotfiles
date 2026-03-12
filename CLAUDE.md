@@ -96,20 +96,21 @@ Defined in `.chezmoi.toml.tmpl`, available in any `.tmpl` file:
 
 ## Remote Browser Opening
 
-SSH 원격 세션에서 로컬 브라우저를 열기 위한 구조 (Claude Code 인증 등에 활용):
+SSH 원격 세션에서 로컬 브라우저를 열기 위한 구조 (Claude Code 인증 등에 활용). TCP 포트 포워딩을 사용하여 stale socket 문제를 회피한다.
 
 ```
 LOCAL (Mac/WSL)                    REMOTE (dev server)
 ===============                    ==================
-opener --server                    BROWSER=~/.local/bin/open-browser
-  ~/.opener.sock  <── SSH -R ──>     ~/.opener.sock (forwarded)
-  → open / wslview                   → nc -U ~/.opener.sock
+opener (TCP :12345)                BROWSER=~/.local/bin/open-browser
+  127.0.0.1:12345  <── SSH -R ──>    127.0.0.1:12345 (forwarded)
+  → open / wslview                   → nc 127.0.0.1 12345
 ```
 
 ### Key Files
 
-- **`dot_local/bin/executable_open-browser`** — URL을 opener 소켓으로 전송하는 스크립트. 소켓 없으면 URL 출력 + OSC 52 클립보드 복사로 fallback.
+- **`dot_local/bin/executable_open-browser`** — URL을 opener TCP 포트로 전송. 연결 실패 시 URL 출력 + OSC 52 클립보드 복사로 fallback.
 - **`dot_config/zsh/ssh-browser.zsh`** — SSH 세션 감지 시 `BROWSER` 환경변수 설정. `opener-status` 진단 함수 포함.
+- **`dot_config/opener/config.yaml`** — opener TCP 모드 설정 (`127.0.0.1:12345`).
 - **`Library/LaunchAgents/com.opener.server.plist`** — Mac에서 opener 데몬 launchd 등록 (Mac only, `.chezmoiignore`로 다른 OS에서 제외).
 - **`run_onchange_before_03_install-binaries.sh`** — `install_opener` 함수: Mac/WSL에서만 opener 바이너리 설치.
 
@@ -118,8 +119,8 @@ opener --server                    BROWSER=~/.local/bin/open-browser
 로컬 `~/.ssh/config`에 추가:
 ```
 Host devserver
-  RemoteForward /home/<user>/.opener.sock /home/<user>/.opener.sock
-  StreamLocalBindUnlink yes
+  RemoteForward 12345 localhost:12345
+  ExitOnForwardFailure yes
 ```
 
 ### WSL에서 opener 데몬 실행
@@ -128,4 +129,3 @@ WSL은 systemd 지원이 환경마다 다르므로 수동 실행:
 ```sh
 opener &
 ```
-소켓 경로는 `~/.config/opener/config.yaml`의 `address` 필드로 설정 (기본값: `~/.opener.sock`).
