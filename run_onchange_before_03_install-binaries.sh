@@ -78,63 +78,8 @@ install_starship() {
   echo "starship installed to $INSTALL_PREFIX/bin/starship"
 }
 
-# ── opener ────────────────────────────────────────────────────────────────────
-
-install_opener() {
-  if command -v opener > /dev/null 2>&1; then
-    echo "opener is already installed: $(command -v opener)"
-    return 0
-  fi
-
-  # Only install on local machines (Mac or WSL), not remote Linux servers
-  local is_local=false
-  case "$OS" in
-    Darwin) is_local=true ;;
-    Linux)
-      if uname -r | grep -qi microsoft; then
-        is_local=true
-      fi
-      ;;
-  esac
-
-  if [ "$is_local" = false ]; then
-    echo "opener: skipping install (not a local machine)"
-    return 0
-  fi
-
-  local asset arch_suffix
-  case "$ARCH" in
-    x86_64)  arch_suffix="amd64" ;;
-    aarch64|arm64) arch_suffix="arm64" ;;
-    *) echo "opener: unsupported arch $ARCH"; return 1 ;;
-  esac
-
-  local os_suffix
-  case "$OS" in
-    Darwin) os_suffix="darwin" ;;
-    Linux)  os_suffix="linux" ;;
-  esac
-
-  asset="opener-${os_suffix}-${arch_suffix}.zip"
-
-  local tmp
-  tmp=$(mktemp -d)
-  trap 'rm -rf "$tmp"' RETURN
-
-  echo "Installing opener (latest)..."
-  curl -fsSL \
-    "https://github.com/superbrothers/opener/releases/latest/download/${asset}" \
-    -o "$tmp/opener.zip" || { echo "opener: download failed"; return 1; }
-
-  unzip -o "$tmp/opener.zip" -d "$tmp" || { echo "opener: unzip failed"; return 1; }
-  install -m 755 "$tmp/opener" "$INSTALL_PREFIX/bin/opener"
-
-  echo "opener installed to $INSTALL_PREFIX/bin/opener"
-}
-
 # ── main ──────────────────────────────────────────────────────────────────────
 
 install_neovim
 install_fzf
 install_starship
-install_opener
