@@ -1,5 +1,12 @@
 {{- $email := promptStringOnce . "email" "Email address for github account" -}}
 
+{{- $isLocal := false -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $isLocal = true -}}
+{{- else if and (eq .chezmoi.os "linux") (contains "microsoft" (lower .chezmoi.kernel.osrelease)) -}}
+{{-   $isLocal = true -}}
+{{- end -}}
+
 [git]
 autoCommit = true
 autoPush = true
@@ -7,3 +14,4 @@ autoPush = true
 [data]
 email = {{ $email | quote }}
 editor = "nvim"
+isLocal = {{ $isLocal }}

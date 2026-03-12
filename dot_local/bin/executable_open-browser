@@ -1,0 +1,19 @@
+#!/bin/sh
+# open-browser — Open a URL via opener socket, with fallback to terminal output
+URL="$1"
+SOCK="${OPENER_SOCK:-$HOME/.opener.sock}"
+
+if [ -z "$URL" ]; then
+  echo "Usage: open-browser <url>" >&2
+  exit 1
+fi
+
+# If opener socket exists, send URL via netcat
+if [ -S "$SOCK" ]; then
+  printf '%s' "$URL" | nc -w2 -U "$SOCK" && exit 0
+fi
+
+# Fallback: print URL and copy to clipboard via OSC 52
+echo "Open this URL in your browser:"
+echo "  $URL"
+printf '\033]52;c;%s\a' "$(printf '%s' "$URL" | base64)" 2>/dev/null

@@ -9,3 +9,9 @@ CLAUDE.md
 **/fish_variables
 
 **/*.swp
+
+# Mac-only files: ignore on non-Darwin
+{{ if ne .chezmoi.os "darwin" }}
+Library/
+Library/**
+{{ end }}

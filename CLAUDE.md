@@ -92,3 +92,39 @@ All tools are installed to `~/.local/bin` without sudo. New tools that fit this 
 Defined in `.chezmoi.toml.tmpl`, available in any `.tmpl` file:
 - `{{ .email }}` — Git commit email
 - `{{ .editor }}` — Set to `"nvim"`
+- `{{ .isLocal }}` — `true` on Mac or WSL, `false` on remote Linux servers
+
+## Remote Browser Opening
+
+SSH 원격 세션에서 로컬 브라우저를 열기 위한 구조 (Claude Code 인증 등에 활용):
+
+```
+LOCAL (Mac/WSL)                    REMOTE (dev server)
+===============                    ==================
+opener --server                    BROWSER=~/.local/bin/open-browser
+  ~/.opener.sock  <── SSH -R ──>     ~/.opener.sock (forwarded)
+  → open / wslview                   → nc -U ~/.opener.sock
+```
+
+### Key Files
+
+- **`dot_local/bin/executable_open-browser`** — URL을 opener 소켓으로 전송하는 스크립트. 소켓 없으면 URL 출력 + OSC 52 클립보드 복사로 fallback.
+- **`dot_config/zsh/ssh-browser.zsh`** — SSH 세션 감지 시 `BROWSER` 환경변수 설정. `opener-status` 진단 함수 포함.
+- **`Library/LaunchAgents/com.opener.server.plist`** — Mac에서 opener 데몬 launchd 등록 (Mac only, `.chezmoiignore`로 다른 OS에서 제외).
+- **`run_onchange_before_03_install-binaries.sh`** — `install_opener` 함수: Mac/WSL에서만 opener 바이너리 설치.
+
+### SSH Config (수동 설정 필요)
+
+로컬 `~/.ssh/config`에 추가:
+```
+Host devserver
+  RemoteForward /home/<user>/.opener.sock /home/<user>/.opener.sock
+  StreamLocalBindUnlink yes
+```
+
+### WSL에서 opener 데몬 실행
+
+WSL은 systemd 지원이 환경마다 다르므로 수동 실행:
+```sh
+opener --socket ~/.opener.sock &
+```

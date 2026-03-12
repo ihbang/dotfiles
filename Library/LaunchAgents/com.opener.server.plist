@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.opener.server</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/inhyeok/.local/bin/opener</string>
+        <string>--socket</string>
+        <string>/Users/inhyeok/.opener.sock</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/Users/inhyeok/.local/share/opener/stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/inhyeok/.local/share/opener/stderr.log</string>
+</dict>
+</plist>
