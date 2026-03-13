@@ -48,19 +48,18 @@ function helm_install() {
 
 function _upgrade_heimdall() {
   local filename="${1:-heimdall-values.yaml}"
-  local version_list
-  mapfile -t version_list < <(helm search repo moreh/heimdall -l | tail -n +2)
+  local version_list=("${(@f)$(helm search repo moreh/heimdall -l | tail -n +2)}")
 
   local i
-  for i in "${!version_list[@]}"; do
-    echo "  $((i+1))) ${version_list[$i]}"
+  for i in {1..${#version_list[@]}}; do
+    echo "  $i) ${version_list[$i]}"
   done
 
   local choice
-  read -r -p "Select version number: " choice
+  read -r "choice?Select version number: "
   if [[ $choice -ge 1 && $choice -le ${#version_list[@]} ]]; then
     local target_version
-    target_version=$(echo "${version_list[$((choice-1))]}" | awk '{print $2}')
+    target_version=$(echo "${version_list[$choice]}" | awk '{print $2}')
     helm upgrade -i heimdall moreh/heimdall --version "$target_version" -n "$KUBENS" -f "$filename"
   else
     echo "Invalid selection"
@@ -69,19 +68,18 @@ function _upgrade_heimdall() {
 }
 
 function _upgrade_mif_preset() {
-  local version_list
-  mapfile -t version_list < <(helm search repo moreh/moai-inference-preset -l | tail -n +2)
+  local version_list=("${(@f)$(helm search repo moreh/moai-inference-preset -l | tail -n +2)}")
 
   local i
-  for i in "${!version_list[@]}"; do
-    echo "  $((i+1))) ${version_list[$i]}"
+  for i in {1..${#version_list[@]}}; do
+    echo "  $i) ${version_list[$i]}"
   done
 
   local choice
-  read -r -p "Select version number: " choice
+  read -r "choice?Select version number: "
   if [[ $choice -ge 1 && $choice -le ${#version_list[@]} ]]; then
     local target_version
-    target_version=$(echo "${version_list[$((choice-1))]}" | awk '{print $2}')
+    target_version=$(echo "${version_list[$choice]}" | awk '{print $2}')
     helm upgrade -i moai-inference-preset moreh/moai-inference-preset --version "$target_version" -n "$KUBENS"
   else
     echo "Invalid selection"
