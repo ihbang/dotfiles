@@ -78,8 +78,51 @@ install_starship() {
   echo "starship installed to $INSTALL_PREFIX/bin/starship"
 }
 
+# ── lazygit ───────────────────────────────────────────────────────────────────
+
+install_lazygit() {
+  if command -v lazygit > /dev/null 2>&1; then
+    echo "lazygit is already installed: $(command -v lazygit)"
+    return 0
+  fi
+
+  local os_suffix arch_suffix
+  case "$OS" in
+    Linux)  os_suffix="linux" ;;
+    Darwin) os_suffix="darwin" ;;
+    *) echo "lazygit: unsupported OS $OS"; return 1 ;;
+  esac
+  case "$ARCH" in
+    x86_64)        arch_suffix="x86_64" ;;
+    aarch64|arm64) arch_suffix="arm64" ;;
+    *) echo "lazygit: unsupported arch $ARCH"; return 1 ;;
+  esac
+
+  local version
+  version=$(curl -fsSL https://api.github.com/repos/jesseduffield/lazygit/releases/latest \
+    | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/') \
+    || { echo "lazygit: failed to fetch latest version"; return 1; }
+
+  local asset="lazygit_${version}_${os_suffix}_${arch_suffix}.tar.gz"
+
+  local tmp
+  tmp=$(mktemp -d)
+  trap 'rm -rf "$tmp"' RETURN
+
+  echo "Installing lazygit v${version}..."
+  curl -fsSL \
+    "https://github.com/jesseduffield/lazygit/releases/download/v${version}/${asset}" \
+    -o "$tmp/lazygit.tar.gz" || { echo "lazygit: download failed"; return 1; }
+
+  tar -xf "$tmp/lazygit.tar.gz" -C "$tmp"
+  install -m 755 "$tmp/lazygit" "$INSTALL_PREFIX/bin/lazygit"
+
+  echo "lazygit installed to $INSTALL_PREFIX/bin/lazygit"
+}
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
 install_neovim
 install_fzf
 install_starship
+install_lazygit
