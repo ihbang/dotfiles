@@ -8,16 +8,6 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ]; then
-  PATH="$HOME/bin:$PATH"
-fi
-
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.local/bin" ]; then
-  PATH="$HOME/.local/bin:$PATH"
-fi
-
 # change shell to zsh if available and not already in zsh
 zsh_path=$(command -v zsh 2>/dev/null)
 if [ -f "$zsh_path" ] && [ "$SHELL" != "$zsh_path" ] && [ -z "$CLAUDECODE" ]; then
