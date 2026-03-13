@@ -9,20 +9,18 @@ if ! command -v cargo > /dev/null 2>&1; then
   exit 0
 fi
 
-# pkg -> binary name
-declare -A packages=(
-  [ripgrep]=rg
-  [bat]=bat
-  [git-delta]=delta
-  [zoxide]=zoxide
-)
-
-for pkg in "${!packages[@]}"; do
-  bin="${packages[$pkg]}"
+# pkg:binary pairs
+install_cargo_pkg() {
+  local pkg="$1" bin="$2"
   if command -v "$bin" > /dev/null 2>&1; then
     echo "$pkg is already installed: $(command -v "$bin")"
   else
     echo "Installing $pkg via cargo..."
     cargo install "$pkg"
   fi
-done
+}
+
+install_cargo_pkg ripgrep rg
+install_cargo_pkg bat bat
+install_cargo_pkg git-delta delta
+install_cargo_pkg zoxide zoxide
