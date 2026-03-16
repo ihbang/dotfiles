@@ -1,0 +1,48 @@
+{
+  "language": "korean",
+  "outputStyle": "Explanatory",
+  "alwaysThinkingEnabled": true,
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "disableBypassPermissionsMode": "disable",
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git status)",
+      "Bash(* --version)",
+      "Bash(* --help *)",
+      "Read",
+      "WebFetch",
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(sudo *)",
+      "Bash(git push *)",
+      "Bash(curl *)",
+      "Bash(wget *)"
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "excludedCommands": ["docker", "git"],
+    "allowUnsandboxedCommands": true,
+    "network": {
+      "allowedDomains": ["github.com", "*.npmjs.org"],
+      "allowLocalBinding": true
+    }
+  },
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "enabledPlugins": {
+    "atlassian@claude-plugins-official": true,
+    "serena@claude-plugins-official": true
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  }
+}
