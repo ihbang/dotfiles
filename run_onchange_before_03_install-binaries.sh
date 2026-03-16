@@ -157,7 +157,7 @@ install_glow() {
     -o "$tmp/glow.tar.gz" || { echo "glow: download failed"; return 1; }
 
   tar -xf "$tmp/glow.tar.gz" -C "$tmp"
-  install -m 755 "$tmp/glow" "$INSTALL_PREFIX/bin/glow"
+  install -m 755 "$(find "$tmp" -name glow -type f)" "$INSTALL_PREFIX/bin/glow"
 
   echo "glow installed to $INSTALL_PREFIX/bin/glow"
 }
