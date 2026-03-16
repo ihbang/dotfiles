@@ -120,9 +120,52 @@ install_lazygit() {
   echo "lazygit installed to $INSTALL_PREFIX/bin/lazygit"
 }
 
+# ── glow ──────────────────────────────────────────────────────────────────────
+
+install_glow() {
+  if command -v glow > /dev/null 2>&1; then
+    echo "glow is already installed: $(command -v glow)"
+    return 0
+  fi
+
+  local os_suffix arch_suffix
+  case "$OS" in
+    Linux)  os_suffix="Linux" ;;
+    Darwin) os_suffix="Darwin" ;;
+    *) echo "glow: unsupported OS $OS"; return 1 ;;
+  esac
+  case "$ARCH" in
+    x86_64)        arch_suffix="x86_64" ;;
+    aarch64|arm64) arch_suffix="arm64" ;;
+    *) echo "glow: unsupported arch $ARCH"; return 1 ;;
+  esac
+
+  local version
+  version=$(curl -fsSL https://api.github.com/repos/charmbracelet/glow/releases/latest \
+    | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/') \
+    || { echo "glow: failed to fetch latest version"; return 1; }
+
+  local asset="glow_${version}_${os_suffix}_${arch_suffix}.tar.gz"
+
+  local tmp
+  tmp=$(mktemp -d)
+  trap 'rm -rf "$tmp"' RETURN
+
+  echo "Installing glow v${version}..."
+  curl -fsSL \
+    "https://github.com/charmbracelet/glow/releases/download/v${version}/${asset}" \
+    -o "$tmp/glow.tar.gz" || { echo "glow: download failed"; return 1; }
+
+  tar -xf "$tmp/glow.tar.gz" -C "$tmp"
+  install -m 755 "$tmp/glow" "$INSTALL_PREFIX/bin/glow"
+
+  echo "glow installed to $INSTALL_PREFIX/bin/glow"
+}
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
 install_neovim
 install_fzf
 install_starship
 install_lazygit
+install_glow
