@@ -162,6 +162,28 @@ install_glow() {
   echo "glow installed to $INSTALL_PREFIX/bin/glow"
 }
 
+# ── nvm + node ────────────────────────────────────────────────────────────────
+
+install_nvm() {
+  if [ -d "$HOME/.nvm" ]; then
+    echo "nvm is already installed: $HOME/.nvm"
+    return 0
+  fi
+
+  echo "Installing nvm (latest)..."
+  curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash \
+    || { echo "nvm: install failed"; return 1; }
+
+  # Load nvm and install latest LTS node
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+  echo "Installing Node.js LTS via nvm..."
+  nvm install --lts
+
+  echo "nvm + Node.js LTS installed"
+}
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
 install_neovim
@@ -169,3 +191,4 @@ install_fzf
 install_starship
 install_lazygit
 install_glow
+install_nvm
