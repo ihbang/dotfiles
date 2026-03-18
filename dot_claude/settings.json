@@ -13,15 +13,20 @@
       "Bash(git status)",
       "Bash(* --version)",
       "Bash(* --help *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(ls *)",
       "Read",
-      "WebFetch",
+      "WebFetch"
     ],
     "deny": [
       "Bash(rm -rf *)",
       "Bash(sudo *)",
       "Bash(git push *)",
       "Bash(curl *)",
-      "Bash(wget *)"
+      "Bash(wget *)",
+      "Bash(kill *)",
+      "Bash(pkill *)"
     ]
   },
   "sandbox": {
