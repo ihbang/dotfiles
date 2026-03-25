@@ -184,6 +184,21 @@ install_nvm() {
   echo "nvm + Node.js LTS installed"
 }
 
+# ── bun ───────────────────────────────────────────────────────────────────────
+
+install_bun() {
+  if command -v bun > /dev/null 2>&1; then
+    echo "bun is already installed: $(command -v bun)"
+    return 0
+  fi
+
+  echo "Installing bun (latest)..."
+  curl -fsSL https://bun.sh/install | bash \
+    || { echo "bun: install failed"; return 1; }
+
+  echo "bun installed"
+}
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
 install_neovim
@@ -192,3 +207,4 @@ install_starship
 install_lazygit
 install_glow
 install_nvm
+install_bun
