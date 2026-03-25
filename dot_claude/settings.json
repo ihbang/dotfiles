@@ -4,29 +4,26 @@
   "alwaysThinkingEnabled": true,
   "permissions": {
     "defaultMode": "acceptEdits",
-    "disableBypassPermissionsMode": "disable",
+    "disableBypassPermissionsMode": "enable",
     "allow": [
-      "Bash(git add *)",
-      "Bash(git commit *)",
-      "Bash(git diff *)",
-      "Bash(git log *)",
-      "Bash(git status)",
       "Bash(* --version)",
       "Bash(* --help *)",
       "Bash(grep *)",
       "Bash(find *)",
       "Bash(ls *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git status)",
+      "Bash(kubectl get)",
+      "Bash(helm list)",
       "Read",
       "WebFetch"
     ],
     "deny": [
       "Bash(rm -rf *)",
       "Bash(sudo *)",
-      "Bash(git push *)",
-      "Bash(curl *)",
-      "Bash(wget *)",
-      "Bash(kill *)",
-      "Bash(pkill *)"
     ]
   },
   "sandbox": {
@@ -35,7 +32,6 @@
     "excludedCommands": ["docker", "git"],
     "allowUnsandboxedCommands": true,
     "network": {
-      "allowedDomains": ["github.com", "*.npmjs.org"],
       "allowLocalBinding": true
     }
   },

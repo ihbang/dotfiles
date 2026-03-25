@@ -30,7 +30,7 @@ eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
 
 # bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+[ -s "/home/inhyeok/.bun/_bun" ] && source "/home/inhyeok/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
