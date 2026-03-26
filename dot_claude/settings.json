@@ -42,6 +42,19 @@
     "atlassian@claude-plugins-official": true,
     "serena@claude-plugins-official": true
   },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '\\a'"
+          }
+        ]
+      }
+    ]
+  },
   "attribution": {
     "commit": "",
     "pr": ""
