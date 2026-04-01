@@ -29,11 +29,6 @@
     ],
     "defaultMode": "auto"
   },
-  "enabledPlugins": {
-    "atlassian@claude-plugins-official": true,
-    "serena@claude-plugins-official": true,
-    "telegram@claude-plugins-official": true
-  },
   "hooks": {
     "Notification": [
       {
@@ -47,8 +42,22 @@
       }
     ]
   },
+  "enabledPlugins": {
+    "atlassian@claude-plugins-official": true,
+    "telegram@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true,
+    "harness@harness-marketplace": true
+  },
+  "extraKnownMarketplaces": {
+    "harness-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "revfactory/harness"
+      }
+    }
+  },
   "outputStyle": "Explanatory",
-  "language": "korean",
+  "language": "Korean",
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
