@@ -199,6 +199,48 @@ install_bun() {
   echo "bun installed"
 }
 
+# ── github cli ─────────────────────────────────────────────────────────────────
+
+install_gh() {
+  if command -v gh > /dev/null 2>&1; then
+    echo "gh is already installed: $(command -v gh)"
+    return 0
+  fi
+
+  local os_suffix arch_suffix
+  case "$OS" in
+    Linux)  os_suffix="linux" ;;
+    Darwin) os_suffix="macOS" ;;
+    *) echo "gh: unsupported OS $OS"; return 1 ;;
+  esac
+  case "$ARCH" in
+    x86_64)        arch_suffix="amd64" ;;
+    aarch64|arm64) arch_suffix="arm64" ;;
+    *) echo "gh: unsupported arch $ARCH"; return 1 ;;
+  esac
+
+  local version
+  version=$(curl -fsSL https://api.github.com/repos/cli/cli/releases/latest \
+    | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/') \
+    || { echo "gh: failed to fetch latest version"; return 1; }
+
+  local asset="gh_${version}_${os_suffix}_${arch_suffix}.tar.gz"
+
+  local tmp
+  tmp=$(mktemp -d)
+  trap 'rm -rf "$tmp"' RETURN
+
+  echo "Installing gh v${version}..."
+  curl -fsSL \
+    "https://github.com/cli/cli/releases/download/v${version}/${asset}" \
+    -o "$tmp/gh.tar.gz" || { echo "gh: download failed"; return 1; }
+
+  tar -xf "$tmp/gh.tar.gz" -C "$tmp"
+  install -m 755 "$(find "$tmp" -name gh -type f -path '*/bin/*')" "$INSTALL_PREFIX/bin/gh"
+
+  echo "gh installed to $INSTALL_PREFIX/bin/gh"
+}
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
 install_neovim
@@ -206,5 +248,6 @@ install_fzf
 install_starship
 install_lazygit
 install_glow
+install_gh
 install_nvm
 install_bun
