@@ -241,6 +241,51 @@ install_gh() {
   echo "gh installed to $INSTALL_PREFIX/bin/gh"
 }
 
+# ── git-lfs ────────────────────────────────────────────────────────────────────
+
+install_git_lfs() {
+  if command -v git-lfs > /dev/null 2>&1; then
+    echo "git-lfs is already installed: $(command -v git-lfs)"
+    return 0
+  fi
+
+  local os_suffix arch_suffix
+  case "$OS" in
+    Linux)  os_suffix="linux" ;;
+    Darwin) os_suffix="darwin" ;;
+    *) echo "git-lfs: unsupported OS $OS"; return 1 ;;
+  esac
+  case "$ARCH" in
+    x86_64)        arch_suffix="amd64" ;;
+    aarch64|arm64) arch_suffix="arm64" ;;
+    *) echo "git-lfs: unsupported arch $ARCH"; return 1 ;;
+  esac
+
+  local version
+  version=$(curl -fsSL https://api.github.com/repos/git-lfs/git-lfs/releases/latest \
+    | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/') \
+    || { echo "git-lfs: failed to fetch latest version"; return 1; }
+
+  local asset="git-lfs-${os_suffix}-${arch_suffix}-v${version}.tar.gz"
+
+  local tmp
+  tmp=$(mktemp -d)
+  trap 'rm -rf "$tmp"' RETURN
+
+  echo "Installing git-lfs v${version}..."
+  curl -fsSL \
+    "https://github.com/git-lfs/git-lfs/releases/download/v${version}/${asset}" \
+    -o "$tmp/git-lfs.tar.gz" || { echo "git-lfs: download failed"; return 1; }
+
+  tar -xf "$tmp/git-lfs.tar.gz" -C "$tmp"
+  install -m 755 "$(find "$tmp" -name git-lfs -type f)" "$INSTALL_PREFIX/bin/git-lfs"
+
+  # Configure git-lfs for the current user
+  git lfs install
+
+  echo "git-lfs installed to $INSTALL_PREFIX/bin/git-lfs"
+}
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
 install_neovim
@@ -249,5 +294,6 @@ install_starship
 install_lazygit
 install_glow
 install_gh
+install_git_lfs
 install_nvm
 install_bun
