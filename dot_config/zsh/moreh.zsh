@@ -3,7 +3,14 @@ alias k='kubectl -n $KUBENS'
 alias ka='kubectl -n $KUBENS apply -f'
 alias kdel='kubectl -n $KUBENS delete'
 alias kget='kubectl -n $KUBENS get -o wide'
-alias setkube='export KUBECONFIG=$(pwd)/kubeconfig.yaml'
+
+function set_cc() {
+  export KUBECONFIG="$HOME/.kube/config.yaml"
+}
+
+function set_vc() {
+  export KUBECONFIG="$HOME/.kube/valhalla_config.yaml"
+}
 
 function helm_reinstall() {
   if [[ $# -eq 1 ]]; then
