@@ -2,7 +2,7 @@
 export EDITOR=nvim
 
 export PATH="$PATH:$HOME/.krew/bin"
-export KUBECONFIG="$HOME/.kube/config.yaml"
+export KUBECONFIG="$HOME/.kube/vconfig.yaml"
 export KUBENS=inhyeok
 
 # LS colors

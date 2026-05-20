@@ -5,11 +5,11 @@ alias kdel='kubectl -n $KUBENS delete'
 alias kget='kubectl -n $KUBENS get -o wide'
 
 function set_cc() {
-  export KUBECONFIG="$HOME/.kube/config.yaml"
+  export KUBECONFIG="$HOME/.kube/cconfig.yaml"
 }
 
 function set_vc() {
-  export KUBECONFIG="$HOME/.kube/valhalla_config.yaml"
+  export KUBECONFIG="$HOME/.kube/vconfig.yaml"
 }
 
 function helm_reinstall() {

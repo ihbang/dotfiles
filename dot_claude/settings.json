@@ -42,13 +42,14 @@
       "WebSearch",
       "mcp__plugin_serena_serena__get_symbols_overview",
       "Bash(find /home/inhyeok/mif/norns/solver/docs -type f 2>/dev/null || echo \"no docs dir\"; find /home/inhyeok/mif/norns/docs -type f -name \"*.md\" 2>/dev/null | head -20)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(/home/inhyeok/.claude/plugins/cache/claude-plugins-official/ralph-loop/*/scripts/setup-ralph-loop.sh:*)"
     ],
     "deny": [
       "Bash(rm -rf *)",
       "Bash(sudo *)"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "acceptEdits"
   },
   "hooks": {
     "Notification": [
@@ -66,7 +67,6 @@
   "enabledPlugins": {
     "atlassian@claude-plugins-official": true,
     "telegram@claude-plugins-official": true,
-    "ralph-loop@claude-plugins-official": true,
     "harness@harness-marketplace": true
   },
   "extraKnownMarketplaces": {
@@ -92,6 +92,11 @@
     ]
   },
   "alwaysThinkingEnabled": true,
-  "skipAutoPermissionPrompt": true,
-  "skipDangerousModePermissionPrompt": true
+  "effortLevel": "high",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark-ansi",
+  "autoCompactEnabled": false,
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": false,
+  "skipAutoPermissionPrompt": true
 }
