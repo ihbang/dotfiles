@@ -64,19 +64,6 @@
       }
     ]
   },
-  "enabledPlugins": {
-    "atlassian@claude-plugins-official": true,
-    "telegram@claude-plugins-official": true,
-    "harness@harness-marketplace": true
-  },
-  "extraKnownMarketplaces": {
-    "harness-marketplace": {
-      "source": {
-        "source": "github",
-        "repo": "revfactory/harness"
-      }
-    }
-  },
   "outputStyle": "Explanatory",
   "language": "Korean",
   "sandbox": {
@@ -98,5 +85,5 @@
   "autoCompactEnabled": false,
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": false,
-  "skipAutoPermissionPrompt": true
+  "model": "opus[1m]"
 }
