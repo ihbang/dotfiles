@@ -51,6 +51,7 @@
     ],
     "defaultMode": "acceptEdits"
   },
+  "model": "opus[1m]",
   "hooks": {
     "Notification": [
       {
@@ -63,6 +64,25 @@
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "documents@a2sys-claude": true,
+    "humanizer@a2sys-claude": true,
+    "caveman@caveman": true
+  },
+  "extraKnownMarketplaces": {
+    "a2sys-claude": {
+      "source": {
+        "source": "github",
+        "repo": "a2sys-platform/claude-plugins"
+      }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    }
   },
   "outputStyle": "Explanatory",
   "language": "Korean",
@@ -84,6 +104,5 @@
   "theme": "dark-ansi",
   "autoCompactEnabled": false,
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": false,
-  "model": "opus[1m]"
+  "agentPushNotifEnabled": false
 }
