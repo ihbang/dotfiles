@@ -68,7 +68,8 @@
   "enabledPlugins": {
     "documents@a2sys-claude": true,
     "humanizer@a2sys-claude": true,
-    "caveman@caveman": true
+    "caveman@caveman": true,
+    "mattpocock-skills@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "a2sys-claude": {

@@ -17,6 +17,14 @@ if [ -d "$HOME/.local/bin" ]; then
   PATH="$HOME/.local/bin:$PATH"
 fi
 
+export PATH="$HOME/.local/bin:$PATH"
+export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="$HOME/.local/lib/pkgconfig:$PKG_CONFIG_PATH"
+export CPPFLAGS="-I$HOME/.local/include -I$HOME/.local/include/ncursesw $CPPFLAGS"
+export LDFLAGS="-L$HOME/.local/lib $LDFLAGS"
+export TERMINFO="$HOME/.local/share/terminfo"
+export TERMINFO_DIRS="$HOME/.local/share/terminfo:/usr/share/terminfo"
+
 # change shell to zsh if available and not already in zsh
 zsh_path=$(command -v zsh 2>/dev/null)
 if [ -f "$zsh_path" ] && [ "$SHELL" != "$zsh_path" ] && [ -z "$CLAUDECODE" ]; then

@@ -35,3 +35,8 @@ eval "$(starship init zsh)"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Force emacs keymap.
+# zsh picks the vi keymap when $EDITOR/$VISUAL contains "vi" ("nvim" matches),
+# which makes Esc drop into vicmd. Must stay last so plugin bindings are set up first.
+bindkey -e
