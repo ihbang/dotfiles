@@ -76,7 +76,7 @@
         "source": "github",
         "repo": "a2sys-platform/claude-plugins"
       }
-    },
+    }
   },
   "outputStyle": "Explanatory",
   "language": "Korean",
