@@ -51,7 +51,6 @@
     ],
     "defaultMode": "acceptEdits"
   },
-  "model": "opus[1m]",
   "hooks": {
     "Notification": [
       {
@@ -63,7 +62,37 @@
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git remote get-url origin 2>/dev/null | grep -q \"a2sys-platform\" && jq -Rs \"{hookSpecificOutput:{hookEventName:\\\"SessionStart\\\",additionalContext:.}}\" \"$HOME/.claude/rules/a2sys-dev-rules.md\" || true",
+            "timeout": 10,
+            "statusMessage": "사내 개발 규정 확인 중"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(gh pr create*)",
+            "command": "jq -r '.tool_input.command // \"\"' | grep -Eq '(^|[;&|] *)gh +pr +create' && git remote get-url origin 2>/dev/null | grep -q \"a2sys-platform\" && awk \"/^## PR\\$/,/^## Review\\$/\" \"$HOME/.claude/rules/a2sys-dev-rules.md\" | jq -Rs \"{hookSpecificOutput:{hookEventName:\\\"PreToolUse\\\",additionalContext:(\\\"[A2SYS rules] before creating a PR — full text: ~/.claude/rules/a2sys-dev-rules.md\\n\\\" + .)}}\" || true",
+            "timeout": 10,
+            "statusMessage": "PR 규정 확인 중"
+          }
+        ]
+      }
     ]
+  },
+  "worktree": {
+    "baseRef": "fresh"
   },
   "enabledPlugins": {
     "documents@a2sys-claude": true,
