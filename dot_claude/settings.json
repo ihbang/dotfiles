@@ -68,7 +68,6 @@
   "enabledPlugins": {
     "documents@a2sys-claude": true,
     "humanizer@a2sys-claude": true,
-    "caveman@caveman": true,
     "mattpocock-skills@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
@@ -78,12 +77,6 @@
         "repo": "a2sys-platform/claude-plugins"
       }
     },
-    "caveman": {
-      "source": {
-        "source": "github",
-        "repo": "JuliusBrussee/caveman"
-      }
-    }
   },
   "outputStyle": "Explanatory",
   "language": "Korean",
