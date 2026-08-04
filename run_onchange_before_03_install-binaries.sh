@@ -325,6 +325,71 @@ install_git_lfs() {
   echo "git-lfs installed to $INSTALL_PREFIX/bin/git-lfs"
 }
 
+# ── pandoc ────────────────────────────────────────────────────────────────────
+
+install_pandoc() {
+  if command -v pandoc >/dev/null 2>&1; then
+    echo "pandoc is already installed: $(command -v pandoc)"
+    return 0
+  fi
+
+  # Note: pandoc tags carry no leading "v", unlike the other tools here.
+  local version
+  version=$(curl -fsSL https://api.github.com/repos/jgm/pandoc/releases/latest |
+    grep '"tag_name"' | sed 's/.*"\([^"]*\)".*/\1/') ||
+    {
+      echo "pandoc: failed to fetch latest version"
+      return 1
+    }
+
+  # macOS ships zips named <arch>-macOS, Linux ships tarballs named linux-<arch>.
+  local asset archive
+  case "$OS-$ARCH" in
+  Darwin-arm64)
+    asset="pandoc-${version}-arm64-macOS.zip"
+    archive="zip"
+    ;;
+  Darwin-x86_64)
+    asset="pandoc-${version}-x86_64-macOS.zip"
+    archive="zip"
+    ;;
+  Linux-x86_64)
+    asset="pandoc-${version}-linux-amd64.tar.gz"
+    archive="tar"
+    ;;
+  Linux-aarch64 | Linux-arm64)
+    asset="pandoc-${version}-linux-arm64.tar.gz"
+    archive="tar"
+    ;;
+  *)
+    echo "pandoc: unsupported platform $OS-$ARCH"
+    return 1
+    ;;
+  esac
+
+  local tmp
+  tmp=$(mktemp -d)
+  trap 'rm -rf "$tmp"' RETURN
+
+  echo "Installing pandoc ${version}..."
+  curl -fsSL \
+    "https://github.com/jgm/pandoc/releases/download/${version}/${asset}" \
+    -o "$tmp/pandoc.archive" || {
+    echo "pandoc: download failed"
+    return 1
+  }
+
+  if [ "$archive" = "zip" ]; then
+    unzip -qq "$tmp/pandoc.archive" -d "$tmp"
+  else
+    tar -xf "$tmp/pandoc.archive" -C "$tmp"
+  fi
+
+  install -m 755 "$(find "$tmp" -name pandoc -type f -path '*/bin/*')" "$INSTALL_PREFIX/bin/pandoc"
+
+  echo "pandoc installed to $INSTALL_PREFIX/bin/pandoc"
+}
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
 install_neovim
@@ -335,3 +400,4 @@ install_glow
 install_gh
 install_git_lfs
 install_nvm
+install_pandoc
