@@ -1,4 +1,5 @@
 {{- $email := promptStringOnce . "email" "Email address for github account" -}}
+{{- $wikiPath := promptStringOnce . "wikiPath" "Path to the personal wiki repository" (printf "%s/Workspace/Wiki" .chezmoi.homeDir) -}}
 
 [git]
 autoCommit = true
@@ -7,3 +8,4 @@ autoPush = true
 [data]
 email = {{ $email | quote }}
 editor = "nvim"
+wikiPath = {{ $wikiPath | quote }}

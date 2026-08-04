@@ -1,10 +1,15 @@
 ---
 name: wiki-harvest
-description: Harvest a work session's durable knowledge into the personal AI/LLM wiki at ~/Workspace/Wiki — documents read, things learned, measurements taken, decisions and their reasoning. Use when the user is wrapping up a session and wants findings reflected into the wiki ("세션 정리", "wiki에 반영", "wrap up", "record what we learned"). Only on an explicit request; never fire on your own at the end of a task.
+description: Harvest a work session's durable knowledge into the personal AI/LLM wiki repository — documents read, things learned, measurements taken, decisions and their reasoning. Use when the user is wrapping up a session and wants findings reflected into the wiki ("세션 정리", "wiki에 반영", "wrap up", "record what we learned"). Only on an explicit request; never fire on your own at the end of a task.
 ---
 
-Wiki root: `$HOME/Workspace/Wiki` — called WIKI below. Resolve it before use and stop if it does
-not exist; do not guess at another location.
+Wiki root: `$WIKI_PATH` — called WIKI below. chezmoi prompts for this path on a new machine and
+sets it in `~/.claude/settings.json`, so it is present in the environment.
+
+Resolve it with `echo "$WIKI_PATH"` before doing anything else. If it is empty, fall back to
+`$HOME/Workspace/Wiki`; if the resolved directory does not exist, stop and say so rather than
+guessing at another location. An empty `WIKI_PATH` usually means `chezmoi apply` has not run on
+this machine — say that, since it is the actual fix.
 
 ## Before anything
 
