@@ -1,7 +1,6 @@
 {
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "WIKI_PATH": "{{ .wikiPath }}"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "attribution": {
     "commit": "",
@@ -16,35 +15,22 @@
       "Bash(ls *)",
       "Bash(git add *)",
       "Bash(git commit *)",
+      "Bash(git checkout:*)",
       "Bash(git diff *)",
       "Bash(git log *)",
       "Bash(git status)",
       "Bash(kubectl get)",
       "Bash(helm list)",
       "Read",
-      "WebFetch",
       "mcp__claude_ai_Atlassian__getConfluencePageDescendants",
       "mcp__claude_ai_Atlassian__searchConfluenceUsingCql",
       "mcp__claude_ai_Atlassian__getConfluencePage",
-      "Bash(ls -la /home/inhyeok/mif/norns/solver/ | grep -E \"\\\\.\\(py|yaml|json|toml\\)$\" | head -20)",
-      "Bash(find /home/inhyeok/mif/norns/solver -path \"*/.venv\" -prune -o -type f -name \"*.md\" -o -name \"*.txt\" -print 2>/dev/null | grep -v \".venv\")",
-      "Bash(cd /home/inhyeok/mif/norns && make lint-python 2>&1)",
-      "mcp__plugin_serena_serena__list_dir",
-      "Bash(find /home/inhyeok/mif/norns/tmp -type f -not -path \"*/\\\\.*\" 2>/dev/null | sort)",
-      "Bash(wc -l /home/inhyeok/mif/norns/tmp/5-as/*.yaml)",
-      "Bash(make test-solver:*)",
-      "Bash(make lint-python:*)",
-      "Bash(find /home/inhyeok/mif/norns -path \"*/helm/*\" -name \"*.yaml\" -o -path \"*/helm/*\" -name \"values.yaml\" 2>/dev/null | head -20)",
-      "Bash(ls /home/inhyeok/mif/norns/tmp/test-metric-collector/2-prerequisites/isvctmpl-*.yaml)",
       "Bash(kubectl get:*)",
       "Bash(kubectl logs:*)",
       "Bash(kubectl rollout:*)",
       "Bash(kubectl describe:*)",
-      "WebSearch",
-      "mcp__plugin_serena_serena__get_symbols_overview",
-      "Bash(find /home/inhyeok/mif/norns/solver/docs -type f 2>/dev/null || echo \"no docs dir\"; find /home/inhyeok/mif/norns/docs -type f -name \"*.md\" 2>/dev/null | head -20)",
-      "Bash(git checkout:*)",
-      "Bash(/home/inhyeok/.claude/plugins/cache/claude-plugins-official/ralph-loop/*/scripts/setup-ralph-loop.sh:*)"
+      "WebFetch",
+      "WebSearch"
     ],
     "deny": [
       "Bash(rm -rf *)",
@@ -83,8 +69,8 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Bash(gh pr create*)",
             "command": "jq -r '.tool_input.command // \"\"' | grep -Eq '(^|[;&|] *)gh +pr +create' && git remote get-url origin 2>/dev/null | grep -q \"a2sys-platform\" && awk \"/^## PR\\$/,/^## Review\\$/\" \"$HOME/.claude/rules/a2sys-dev-rules.md\" | jq -Rs \"{hookSpecificOutput:{hookEventName:\\\"PreToolUse\\\",additionalContext:(\\\"[A2SYS rules] before creating a PR — full text: ~/.claude/rules/a2sys-dev-rules.md\\n\\\" + .)}}\" || true",
+            "if": "Bash(gh pr create*)",
             "timeout": 10,
             "statusMessage": "PR 규정 확인 중"
           }
@@ -98,7 +84,14 @@
   "enabledPlugins": {
     "documents@a2sys-claude": true,
     "humanizer@a2sys-claude": true,
-    "mattpocock-skills@claude-plugins-official": true
+    "mattpocock-skills@claude-plugins-official": true,
+    "core@a2sys-claude": true,
+    "code-simplifier@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "wdw@a2sys-claude": true
   },
   "extraKnownMarketplaces": {
     "a2sys-claude": {
@@ -127,6 +120,8 @@
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-ansi",
   "autoCompactEnabled": false,
+  "wheelScrollAccelerationEnabled": false,
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": false
+  "agentPushNotifEnabled": false,
+  "_reAddTest": true
 }

@@ -3,13 +3,19 @@ name: wiki-harvest
 description: Harvest a work session's durable knowledge into the personal AI/LLM wiki repository — documents read, things learned, measurements taken, decisions and their reasoning. Use when the user is wrapping up a session and wants findings reflected into the wiki ("세션 정리", "wiki에 반영", "wrap up", "record what we learned"). Only on an explicit request; never fire on your own at the end of a task.
 ---
 
-Wiki root: `$WIKI_PATH` — called WIKI below. chezmoi prompts for this path on a new machine and
-sets it in `~/.claude/settings.json`, so it is present in the environment.
+Wiki root — called WIKI below. Resolve it before doing anything else:
 
-Resolve it with `echo "$WIKI_PATH"` before doing anything else. If it is empty, fall back to
-`$HOME/Workspace/Wiki`; if the resolved directory does not exist, stop and say so rather than
-guessing at another location. An empty `WIKI_PATH` usually means `chezmoi apply` has not run on
-this machine — say that, since it is the actual fix.
+    chezmoi execute-template '{{ .wikiPath }}'
+
+chezmoi prompts for this path on a new machine and keeps it in its own config, which is the
+single source of truth. Do not look for an environment variable: `~/.claude/settings.json` is a
+file Claude Code writes to itself, so it is deliberately not a chezmoi template and carries no
+wiki path.
+
+If that command fails or prints nothing, fall back to `$HOME/Workspace/Wiki`. If the resolved
+directory does not exist, stop and say so rather than guessing at another location — on a machine
+carrying these dotfiles, `chezmoi apply` clones the wiki, so a missing directory means apply has
+not run yet.
 
 ## Before anything
 
