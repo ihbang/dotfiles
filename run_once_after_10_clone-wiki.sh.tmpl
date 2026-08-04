@@ -1,0 +1,42 @@
+#!/bin/bash
+# Clone the personal wiki repository if it is not present at the configured path.
+#
+# The path comes from chezmoi's wikiPath value rather than $WIKI_PATH. That variable is
+# exported by ~/.claude/settings.json and therefore only exists inside Claude Code
+# sessions, not in the shell chezmoi runs scripts in.
+#
+# This is an after_ script so that gh and git from 03_install-binaries.sh already exist.
+# Failing here is deliberate: chezmoi only records a run_once_ script once it succeeds, so
+# a machine that is not authenticated yet retries on the next apply instead of silently
+# never cloning. Change the exits to 0 if you would rather apply never fail on this.
+
+set -eu
+
+wiki_path={{ .wikiPath | quote }}
+wiki_repo="ihbang/llm-wiki"
+
+if [ -d "$wiki_path/.git" ]; then
+  echo "wiki is already cloned: $wiki_path"
+  exit 0
+fi
+
+if [ -e "$wiki_path" ]; then
+  echo "wiki: $wiki_path exists but is not a git repository — leaving it untouched" >&2
+  exit 1
+fi
+
+if ! command -v gh >/dev/null 2>&1; then
+  echo "wiki: gh is not installed, cannot clone $wiki_repo" >&2
+  exit 1
+fi
+
+if ! gh auth status >/dev/null 2>&1; then
+  echo "wiki: gh is not authenticated. Run 'gh auth login' — pick HTTPS if this machine has" >&2
+  echo "      no SSH key registered with GitHub — then run 'chezmoi apply' again." >&2
+  exit 1
+fi
+
+echo "Cloning $wiki_repo into $wiki_path..."
+mkdir -p "$(dirname "$wiki_path")"
+gh repo clone "$wiki_repo" "$wiki_path"
+echo "wiki cloned to $wiki_path"
