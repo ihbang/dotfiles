@@ -276,10 +276,17 @@ install_git_lfs() {
     return 0
   fi
 
-  local os_suffix arch_suffix
+  # git-lfs ships zips for macOS and tarballs for Linux.
+  local os_suffix arch_suffix ext
   case "$OS" in
-  Linux) os_suffix="linux" ;;
-  Darwin) os_suffix="darwin" ;;
+  Linux)
+    os_suffix="linux"
+    ext="tar.gz"
+    ;;
+  Darwin)
+    os_suffix="darwin"
+    ext="zip"
+    ;;
   *)
     echo "git-lfs: unsupported OS $OS"
     return 1
@@ -302,7 +309,7 @@ install_git_lfs() {
       return 1
     }
 
-  local asset="git-lfs-${os_suffix}-${arch_suffix}-v${version}.tar.gz"
+  local asset="git-lfs-${os_suffix}-${arch_suffix}-v${version}.${ext}"
 
   local tmp
   tmp=$(mktemp -d)
@@ -311,12 +318,16 @@ install_git_lfs() {
   echo "Installing git-lfs v${version}..."
   curl -fsSL \
     "https://github.com/git-lfs/git-lfs/releases/download/v${version}/${asset}" \
-    -o "$tmp/git-lfs.tar.gz" || {
+    -o "$tmp/git-lfs.archive" || {
     echo "git-lfs: download failed"
     return 1
   }
 
-  tar -xf "$tmp/git-lfs.tar.gz" -C "$tmp"
+  if [ "$ext" = "zip" ]; then
+    unzip -qq "$tmp/git-lfs.archive" -d "$tmp"
+  else
+    tar -xf "$tmp/git-lfs.archive" -C "$tmp"
+  fi
   install -m 755 "$(find "$tmp" -name git-lfs -type f)" "$INSTALL_PREFIX/bin/git-lfs"
 
   # Configure git-lfs for the current user
