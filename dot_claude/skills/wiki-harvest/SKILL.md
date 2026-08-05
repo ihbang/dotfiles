@@ -81,7 +81,7 @@ Report and wait for approval. Do not write yet.
 
 ## 4. Write
 
-Write the session note first, as a raw source:
+The session note goes in first, as a raw source:
 `WIKI/raw/session-YYYY-MM-DD-<slug>.md`
 
 It holds the distilled findings, each measurement with the conditions that make it meaningful,
@@ -91,6 +91,26 @@ This is not a workaround for the missing original. Measurements taken in the ses
 primary record, so they earn `raw/` more honestly than a vendor doc does. It also means no
 convention has to bend: the note gets a `source` page at the matching stem, every claim traces to
 a file, and the existing lint rules apply as written.
+
+### A note for this session may already exist
+
+Being invoked twice in one session is normal — a session ends when the user stops talking, which
+nobody can predict. Before writing, look:
+
+    ls WIKI/raw/session-$(date +%F)-*.md
+
+If one of those covers **the same topic as what you are about to write**, append to it rather than
+starting a file. Session notes are append-only, not immutable; `WIKI/CLAUDE.md` §`raw/`의 두 등급
+carries the rule and the marker format. If the topic drifted, a new note with a new slug is
+correct — same-session is not by itself a reason to append.
+
+Appending is a normal ingest of a new segment, so the rest does not change shape: the existing
+`source` page gets the new findings (citing the appended section), `reviewed` moves because the
+new claims really were verified, and `wiki/log.md` gets a second `ingest` block naming the same
+raw stem. Two ingests into one source is the honest record, not a duplicate.
+
+**Do not put the new findings only on the `source` page.** That leaves primary claims with no file
+behind them and quietly voids "every claim traces to a file" above.
 
 Then follow the ingest procedure in `WIKI/CLAUDE.md` — source page, the concept/entity/comparison
 pages from the approved plan, inbound links from related pages, `wiki/index.md` entries, and a
