@@ -63,6 +63,19 @@
         ]
       }
     ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.claude/hooks/wiki-match.sh\" 2>/dev/null || true",
+            "timeout": 5,
+            "statusMessage": "위키 관련 페이지 확인 중"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash",
