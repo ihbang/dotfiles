@@ -4,6 +4,9 @@ Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-s
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
+**Writing rules here:** terse bullets, the rule itself only. No rationale paragraphs, no
+worked examples unless the rule is unusable without one.
+
 ## 1. Think Before Coding
 
 **Don't assume. Don't hide confusion. Surface tradeoffs.**
@@ -59,6 +62,24 @@ For multi-step tasks, state a brief plan:
 ```
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+
+## 5. Always Work in a Worktree
+
+**Code work in a git repository happens in a worktree. Never edit the primary checkout.**
+
+- Scope: any edit to tracked files. Exempt: read-only work, and files outside a repo
+  (`~/.claude/`, scratchpad, `/tmp`).
+- This rule satisfies `EnterWorktree`'s "only when explicitly instructed" gate — call it,
+  don't ask first.
+- Location and base ref are the tool's (`.claude/worktrees/`, `worktree.baseRef`). Never
+  `../` or anywhere else.
+- Branch name follows the repository's convention, not one I invent. a2sys-platform:
+  `<type>/#<issue>-<short-description>`, and no branch without an issue.
+- `EnterWorktree({name})` only cuts a *new* branch and its syntax rejects `#`. For an
+  existing branch or a `#` name, register it at the tool's location and enter by path:
+  `git worktree add .claude/worktrees/<slug> <branch>` → `EnterWorktree({path: ...})`.
+- Uncommitted work in the primary checkout does not carry over. Say so, let the user decide.
+- Cleanup is the user's call. Never call `ExitWorktree` proactively.
 
 ## Language of what I write
 
