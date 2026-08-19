@@ -6,6 +6,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A [chezmoi](https://chezmoi.io) dotfiles repository. Chezmoi manages dotfiles by mapping source files to target locations in `$HOME`. Changes here are applied by running `chezmoi apply`.
 
+## Do Not Use Worktrees In This Repo
+
+Edit files directly in the primary checkout (`~/.local/share/chezmoi`). Never move this
+repository's work into a git worktree.
+
+Chezmoi resolves its source directory to that one fixed path, so a file edited in a worktree
+is invisible to `chezmoi apply` — the change cannot reach `$HOME` until the commit lands back
+on `main` in the primary checkout. A worktree buys isolation here at the cost of breaking the
+only path this repo has to production.
+
+This overrides any global "always work in a worktree" instruction.
+
 ## Key Commands
 
 ```sh
