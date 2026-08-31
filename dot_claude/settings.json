@@ -102,7 +102,13 @@
     "core@a2sys-claude": true,
     "code-simplifier@claude-plugins-official": true,
     "i-have-adhd@i-have-adhd": true,
-    "humanize-korean@im-not-ai": true
+    "humanize-korean@im-not-ai": true,
+    "frontend-slides@frontend-slides": true,
+    "document-skills@anthropic-agent-skills": true,
+    "code-review@claude-plugins-official": true,
+    "eli5@claude-community": true,
+    "example-skills@anthropic-agent-skills": true,
+    "claude-obsidian@agricidaniel-claude-obsidian": true
   },
   "extraKnownMarketplaces": {
     "a2sys-claude": {
@@ -121,6 +127,30 @@
       "source": {
         "source": "github",
         "repo": "epoko77-ai/im-not-ai"
+      }
+    },
+    "frontend-slides": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/zarazhangrui/frontend-slides.git"
+      }
+    },
+    "anthropic-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
+    },
+    "claude-community": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-community"
+      }
+    },
+    "agricidaniel-claude-obsidian": {
+      "source": {
+        "source": "github",
+        "repo": "AgriciDaniel/claude-obsidian"
       }
     }
   },
