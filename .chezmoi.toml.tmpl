@@ -1,5 +1,4 @@
 {{- $email := promptStringOnce . "email" "Email address for github account" -}}
-{{- $wikiPath := promptStringOnce . "wikiPath" "Path to the personal wiki repository" (printf "%s/Workspace/Wiki" .chezmoi.homeDir) -}}
 
 [git]
 autoCommit = true
@@ -8,4 +7,7 @@ autoPush = true
 [data]
 email = {{ $email | quote }}
 editor = "nvim"
-wikiPath = {{ $wikiPath | quote }}
+{{/* The personal wiki is not configurable: it always lives under ~/Documents, and
+     run_once_after_10_clone-wiki.sh clones it there. Kept as a data value because
+     the wiki-match hook resolves it with `chezmoi execute-template`. */ -}}
+wikiPath = {{ printf "%s/Documents/llm-wiki" .chezmoi.homeDir | quote }}

@@ -1,9 +1,11 @@
 #!/bin/bash
-# Clone the personal wiki repository if it is not present at the configured path.
+# Clone the personal wiki repository into ~/Documents if it is not there already.
 #
-# The path comes from chezmoi's wikiPath value rather than $WIKI_PATH. That variable is
-# exported by ~/.claude/settings.json and therefore only exists inside Claude Code
-# sessions, not in the shell chezmoi runs scripts in.
+# The path is not configurable; it comes from chezmoi's wikiPath value, which
+# .chezmoi.toml.tmpl derives from the home directory. It is read from there rather than
+# from $WIKI_PATH because that variable is exported by ~/.claude/settings.json and
+# therefore only exists inside Claude Code sessions, not in the shell chezmoi runs
+# scripts in.
 #
 # This is an after_ script so that gh and git from 03_install-binaries.sh already exist.
 # Failing here is deliberate: chezmoi only records a run_once_ script once it succeeds, so
