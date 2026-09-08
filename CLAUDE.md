@@ -64,9 +64,11 @@ New `*.zsh` files dropped into `dot_config/zsh/` are automatically sourced by `d
 
 - **`dot_config/starship.toml`** — Starship prompt appearance: color theme, per-module styles, prompt character. Dracula theme applied via `[palettes.dracula]`.
 
-### Tmux
+### Herdr
 
-- **`dot_tmux.conf`** — All tmux configuration: keybindings, behaviour, and plugins (via TPM).
+- **`dot_config/herdr/config.toml`** — All herdr configuration: prefix and keybindings, theme, tab bar entries, and notification delivery. Keybindings are ported from the tmux config this repo used previously, so `prefix` is `ctrl+a` and a few herdr defaults are moved aside to keep the tmux keys (`edit_scrollback` and `resize_mode` are shifted to their `shift` variants).
+
+After editing, apply it to the running server with `herdr server reload-config`. It reports parse errors, unknown keys, and invalid keybindings as diagnostics, and answers `applied`, `partial`, or `failed` — a silent `applied` with empty diagnostics is the only result that means every entry was accepted.
 
 ### Git
 
