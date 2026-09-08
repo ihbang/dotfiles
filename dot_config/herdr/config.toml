@@ -1,0 +1,72 @@
+onboarding = false
+
+[theme]
+# tmux: set -g @plugin 'dracula/tmux'
+name = "dracula"
+auto_switch = false
+
+[keys]
+# tmux: set-option -g prefix C-a / unbind C-b
+prefix = "ctrl+a"
+
+# tmux: bind Escape copy-mode / setw -g mode-keys vi
+copy_mode = "prefix+esc"
+
+# tmux: bind \ split-window -hc "#{pane_current_path}"
+#       bind - split-window -c "#{pane_current_path}"
+split_vertical = "prefix+\\"
+split_horizontal = "prefix+minus"
+
+# tmux: bind -n C-h previous-window / bind -n C-l next-window
+previous_tab = "ctrl+h"
+next_tab = "ctrl+l"
+
+# tmux: bind -n M-h swap-window -t -1 / bind -n M-l swap-window -t +1
+move_tab_previous = "alt+h"
+move_tab_next = "alt+l"
+
+# tmux: bind r source-file ~/.tmux.conf
+# herdr default is prefix+shift+r; resize_mode is moved aside to free prefix+r.
+reload_config = "prefix+r"
+resize_mode = "prefix+shift+r"
+
+# herdr default is prefix+e; moved aside so prefix+e can edit the config
+# the way tmux's `bind e` did.
+edit_scrollback = "prefix+shift+e"
+
+# tmux: bind e new-window '...vi ~/.tmux.conf && tmux source ~/.tmux.conf'
+[[keys.command]]
+key = "prefix+e"
+type = "popup"
+command = "sh -c 'nvim ~/.config/herdr/config.toml && herdr server reload-config'"
+width = "80%"
+height = "80%"
+
+[ui]
+status_indicators = "symbols"
+
+# tmux: bind c new-window (tmux does not ask for a name)
+prompt_new_tab_name = false
+
+# tmux: set -g @dracula-plugins "git cpu-usage ram-usage time"
+# git is covered by the sidebar's branch/git_status tokens instead.
+tab_bar_right_separator = "  "
+
+[[ui.tab_bar_right]]
+type = "command"
+command = "vmstat 1 2 | tail -1 | awk '{printf \"CPU %d%%\", 100-$15}'"
+interval_seconds = 5
+timeout_seconds = 3
+
+[[ui.tab_bar_right]]
+type = "command"
+command = "free | awk '/^Mem:/{printf \"RAM %.0f%%\", $3/$2*100}'"
+interval_seconds = 5
+timeout_seconds = 3
+
+[[ui.tab_bar_right]]
+type = "datetime"
+format = "%Y-%m-%d %H:%M"
+
+[ui.toast]
+delivery = "herdr"
