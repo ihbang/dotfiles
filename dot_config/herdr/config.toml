@@ -5,12 +5,17 @@ onboarding = false
 name = "dracula"
 auto_switch = false
 
+# Sidebar secondary text (tab, branch, agent, machine names) renders in overlay0,
+# and custom metadata tokens in overlay1. Dracula's stock values sit close to the
+# panel background (overlay0 #6272a4 is only 3.0:1 against it), so both are lifted
+# in HSL lightness with hue and saturation kept intact.
+[theme.custom]
+overlay0 = "#929dc0"  # was #6272a4 - 3.0:1 -> 5.3:1 against the panel background
+overlay1 = "#a8afcb"  # was #828cb4 - 4.3:1 -> 6.6:1
+
 [keys]
 # tmux: set-option -g prefix C-a / unbind C-b
 prefix = "ctrl+a"
-
-# tmux: bind Escape copy-mode / setw -g mode-keys vi
-copy_mode = "prefix+esc"
 
 # tmux: bind \ split-window -hc "#{pane_current_path}"
 #       bind - split-window -c "#{pane_current_path}"
@@ -25,18 +30,13 @@ next_tab = "ctrl+l"
 move_tab_previous = "alt+h"
 move_tab_next = "alt+l"
 
-# tmux: bind r source-file ~/.tmux.conf
-# herdr default is prefix+shift+r; resize_mode is moved aside to free prefix+r.
-reload_config = "prefix+r"
-resize_mode = "prefix+shift+r"
-
-# herdr default is prefix+e; moved aside so prefix+e can edit the config
-# the way tmux's `bind e` did.
-edit_scrollback = "prefix+shift+e"
+new_workspace = "prefix+shift+c"
+next_agent = "ctrl+j"
+previous_agent = "ctrl+k"
 
 # tmux: bind e new-window '...vi ~/.tmux.conf && tmux source ~/.tmux.conf'
 [[keys.command]]
-key = "prefix+e"
+key = "prefix+shift+e"
 type = "popup"
 command = "sh -c 'nvim ~/.config/herdr/config.toml && herdr server reload-config'"
 width = "80%"
@@ -46,27 +46,17 @@ height = "80%"
 status_indicators = "symbols"
 
 # tmux: bind c new-window (tmux does not ask for a name)
-prompt_new_tab_name = false
+prompt_new_tab_name = true
 
-# tmux: set -g @dracula-plugins "git cpu-usage ram-usage time"
-# git is covered by the sidebar's branch/git_status tokens instead.
-tab_bar_right_separator = "  "
-
-[[ui.tab_bar_right]]
-type = "command"
-command = "vmstat 1 2 | tail -1 | awk '{printf \"CPU %d%%\", 100-$15}'"
-interval_seconds = 5
-timeout_seconds = 3
-
-[[ui.tab_bar_right]]
-type = "command"
-command = "free | awk '/^Mem:/{printf \"RAM %.0f%%\", $3/$2*100}'"
-interval_seconds = 5
-timeout_seconds = 3
-
-[[ui.tab_bar_right]]
-type = "datetime"
-format = "%Y-%m-%d %H:%M"
+# The Agents list hardcodes Modifier::DIM on its secondary tokens (machine, tab,
+# agent), which halves them again on top of the overlay0 lift above. Restating
+# the default rows lets each of those tokens turn the dim modifier back off.
+# state_icon and workspace are left bare because neither is dimmed to begin with.
+[ui.sidebar.agents]
+rows = [
+  ["state_icon", { token = "machine", dim = false }, "workspace", { token = "tab", dim = false }],
+  [{ token = "agent", dim = false }],
+]
 
 [ui.toast]
 delivery = "herdr"
