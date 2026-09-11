@@ -39,6 +39,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "opus[1m]",
   "hooks": {
     "Notification": [
       {
@@ -60,6 +61,16 @@
             "command": "git remote get-url origin 2>/dev/null | grep -q \"a2sys-platform\" && jq -Rs \"{hookSpecificOutput:{hookEventName:\\\"SessionStart\\\",additionalContext:.}}\" \"$HOME/.claude/rules/a2sys-dev-rules.md\" || true",
             "timeout": 10,
             "statusMessage": "사내 개발 규정 확인 중"
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/home/inhyeok_bang_a2sys_ai/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
           }
         ]
       }
@@ -94,6 +105,10 @@
   },
   "worktree": {
     "baseRef": "fresh"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/awesome-statusline.sh"
   },
   "enabledPlugins": {
     "documents@a2sys-claude": true,
@@ -154,7 +169,7 @@
       }
     }
   },
-  "outputStyle": "Explanatory",
+  "outputStyle": "fluent-korean",
   "language": "Korean",
   "sandbox": {
     "enabled": true,
@@ -170,11 +185,17 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "xhigh"
+    }
+  },
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-ansi",
   "autoCompactEnabled": false,
   "wheelScrollAccelerationEnabled": false,
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": false
 }

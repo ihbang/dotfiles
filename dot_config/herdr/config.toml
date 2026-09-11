@@ -34,6 +34,18 @@ new_workspace = "prefix+shift+c"
 next_agent = "ctrl+j"
 previous_agent = "ctrl+k"
 
+[[keys.command]]
+key = "prefix+e"
+type = "plugin_action"
+command = "chmarax.herdr-nvim.toggle"
+description = "nvim sidebar"
+
+[[keys.command]]
+key = "prefix+o"
+type = "plugin_action"
+command = "chmarax.herdr-nvim.pick-file"
+description = "open file from agent output"
+
 # tmux: bind e new-window '...vi ~/.tmux.conf && tmux source ~/.tmux.conf'
 [[keys.command]]
 key = "prefix+shift+e"
@@ -43,7 +55,7 @@ width = "80%"
 height = "80%"
 
 [ui]
-status_indicators = "symbols"
+status_indicators = "dots"
 
 # tmux: bind c new-window (tmux does not ask for a name)
 prompt_new_tab_name = true
@@ -60,3 +72,6 @@ rows = [
 
 [ui.toast]
 delivery = "herdr"
+
+[experimental]
+kitty_graphics = true

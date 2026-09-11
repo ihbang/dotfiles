@@ -4,6 +4,7 @@ export EDITOR=nvim
 export PATH="$PATH:$HOME/.krew/bin"
 export KUBECONFIG="$HOME/.kube/vconfig.yaml"
 export KUBENS=inhyeok
+export CLAUDE_CONFIG_DIR="$HOME/.claude-personal"
 
 # LS colors
 [ -x "$(command -v dircolors)" ] && eval "$(dircolors -b)"
