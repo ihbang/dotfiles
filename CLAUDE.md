@@ -106,10 +106,11 @@ Marketplaces and plugins are not checked in. `~/.claude/plugins` holds a few hun
 | `run_onchange_before_02_install-zsh.sh` | Builds zsh from source to `~/.local` if not found |
 | `run_onchange_before_03_install-binaries.sh` | Installs CLI tools to `~/.local/bin`: neovim (GitHub latest release), fzf (git clone), starship (official install.sh), herdr (official install.sh) |
 | `run_onchange_before_04_install-cargo-packages.sh` | Installs cargo-based CLI tools: ripgrep, bat, git-delta |
+| `run_onchange_before_05_install-npm-packages.sh` | Installs global npm packages: `@openai/codex` (the `codex` CLI). Sources `nvm.sh` itself, because chezmoi runs the script before `dot_zshrc` can load nvm |
 | `run_onchange_after_20_herdr-setup.sh` | Installs the herdr Claude Code integration hook and the herdr-nvim plugin (runs after apply, so `config.toml` is already in place) |
 | `run_onchange_after_21_claude-plugins.sh` | Adds the declared Claude Code marketplaces and installs the declared plugins |
 
-All tools are installed to `~/.local/bin` without sudo. New tools that fit this pattern should be added to script `03` or `04` depending on whether they install via cargo.
+All tools are installed to `~/.local/bin` without sudo. A new tool belongs in script `03` when it ships a standalone binary, in `04` when it installs via cargo, and in `05` when it installs via npm. The numeric prefixes order the scripts, so `04` and `05` can rely on `01` and `03` having provided cargo and node.
 
 ## Template Variables
 
