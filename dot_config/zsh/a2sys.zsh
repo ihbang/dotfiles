@@ -19,15 +19,3 @@ function scpdev {
     --port "$port" \
     "$@"
 }
-
-function ccauth {
-  local personal_dir="$HOME/.claude-personal"
-  local share_dir="$HOME/.claude-share"
-
-  case "$1" in
-    p | personal)
-      export CLAUDE_CONFIG_DIR="$personal_dir" ;;
-    s | share)
-      export CLAUDE_CONFIG_DIR="$share_dir" ;;
-  esac
-}
