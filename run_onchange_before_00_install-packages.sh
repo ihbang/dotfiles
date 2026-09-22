@@ -4,6 +4,9 @@
 # poppler provides pdftoppm, which Claude Code's Read tool needs to render PDFs.
 # It is a C++ library with no prebuilt release artifacts, so it cannot go in
 # run_onchange_before_03_install-binaries.sh with the rest.
+#
+# jq is what dot_claude/executable_awesome-statusline.sh and the settings.json
+# hooks parse their JSON input with, so the status line is blank without it.
 
 OS=$(uname -s)
 
@@ -25,6 +28,13 @@ Darwin)
     echo "Installing coreutils..."
     brew install coreutils
   fi
+
+  if command -v jq >/dev/null 2>&1; then
+    echo "jq is already installed: $(command -v jq)"
+  else
+    echo "Installing jq..."
+    brew install jq
+  fi
   ;;
 Linux)
   if command -v pdftoppm >/dev/null 2>&1; then
@@ -38,8 +48,20 @@ Linux)
   else
     echo "poppler: no supported package manager found; install poppler-utils manually"
   fi
+
+  if command -v jq >/dev/null 2>&1; then
+    echo "jq is already installed: $(command -v jq)"
+  elif command -v apt-get >/dev/null 2>&1; then
+    echo "Installing jq..."
+    sudo apt-get update -qq && sudo apt-get install -y jq
+  elif command -v dnf >/dev/null 2>&1; then
+    echo "Installing jq..."
+    sudo dnf install -y jq
+  else
+    echo "jq: no supported package manager found; install jq manually"
+  fi
   ;;
 *)
-  echo "poppler: unsupported OS $OS"
+  echo "poppler, jq: unsupported OS $OS"
   ;;
 esac

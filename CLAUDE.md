@@ -74,7 +74,7 @@ After editing, apply it to the running server with `herdr server reload-config`.
 
 ### Claude Code
 
-- **`dot_claude/`** — Global Claude Code config: `settings.json` (permissions, hooks, env), `CLAUDE.md` (instructions for every project), and `output-styles/fluent-korean.md`.
+- **`dot_claude/`** — Global Claude Code config: `settings.json` (permissions, hooks, env), `CLAUDE.md` (instructions for every project), `output-styles/fluent-korean.md`, and `executable_awesome-statusline.sh`, the three-line status line that `settings.json` points at through its `statusLine.command`. The script is vendored as-is (Awesome Statusline v2.1.1): it is self-contained, reads the status line JSON from stdin, and parses it with `jq`, which `run_onchange_before_00_install-packages.sh` installs.
 
 Marketplaces and plugins are not checked in. `~/.claude/plugins` holds a few hundred megabytes of marketplace clones and plugin cache that are re-fetched from GitHub, and `installed_plugins.json` records absolute paths and commit SHAs that do not travel between machines. `run_onchange_after_21_claude-plugins.sh` declares the marketplaces and plugin ids instead and is idempotent, so adding a plugin means adding one line there. Plugins with scope `synced` come from claude.ai and are left to Claude Code; skills under `~/.claude/skills` are either symlinks into other checkouts or cloud-synced, so none of them are managed here either.
 
@@ -101,7 +101,7 @@ Marketplaces and plugins are not checked in. `~/.claude/plugins` holds a few hun
 
 | Script | Purpose |
 |---|---|
-| `run_onchange_before_00_install-packages.sh` | OS package manager installs: poppler (`pdftoppm`); on macOS also GNU coreutils, so `ls` can alias to `gls` |
+| `run_onchange_before_00_install-packages.sh` | OS package manager installs: poppler (`pdftoppm`) and jq; on macOS also GNU coreutils, so `ls` can alias to `gls` |
 | `run_onchange_before_01_install-rust.sh` | Installs Rust toolchain via rustup |
 | `run_onchange_before_02_install-zsh.sh` | Builds zsh from source to `~/.local` if not found |
 | `run_onchange_before_03_install-binaries.sh` | Installs CLI tools to `~/.local/bin`: neovim (GitHub latest release), fzf (git clone), starship (official install.sh), herdr (official install.sh) |
