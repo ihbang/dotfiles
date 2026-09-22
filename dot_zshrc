@@ -40,3 +40,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # zsh picks the vi keymap when $EDITOR/$VISUAL contains "vi" ("nvim" matches),
 # which makes Esc drop into vicmd. Must stay last so plugin bindings are set up first.
 bindkey -e
+
+# Added by aisw
+eval "$(aisw shell-hook zsh)"

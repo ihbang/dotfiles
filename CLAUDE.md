@@ -78,6 +78,32 @@ After editing, apply it to the running server with `herdr server reload-config`.
 
 Marketplaces and plugins are not checked in. `~/.claude/plugins` holds a few hundred megabytes of marketplace clones and plugin cache that are re-fetched from GitHub, and `installed_plugins.json` records absolute paths and commit SHAs that do not travel between machines. `run_onchange_after_21_claude-plugins.sh` declares the marketplaces and plugin ids instead and is idempotent, so adding a plugin means adding one line there. Plugins with scope `synced` come from claude.ai and are left to Claude Code; skills under `~/.claude/skills` are either symlinks into other checkouts or cloud-synced, so none of them are managed here either.
 
+### Account Switching (aisw)
+
+`aisw` switches which Claude Code / Codex account is active. It is installed by
+`run_onchange_before_04_install-cargo-packages.sh`; nothing else about it is checked in,
+because its state under `~/.aisw/` is credentials and machine-local metadata.
+
+Claude is configured for **`shared` state mode**, which is the setting this repo depends on.
+In the default `isolated` mode `aisw use` exports `CLAUDE_CONFIG_DIR=~/.aisw/profiles/claude/<profile>`,
+and Claude Code then keeps `projects/`, `sessions/`, `history.jsonl`, `skills/`, `plugins/` and
+`.claude.json` there — so every profile starts from an empty history and the symlinked skills in
+`~/.claude/skills` disappear. In `shared` mode `CLAUDE_CONFIG_DIR` stays unset, all of that state
+stays in `~/.claude`, and switching profiles only swaps `.credentials.json` and the `oauthAccount`
+block of `.claude.json`. Set it once per machine:
+
+```sh
+aisw use claude <profile> --state-mode shared
+```
+
+The trade-off is that two accounts cannot be live at the same time, since they share one
+credentials file. Start a fresh Claude process after switching.
+
+Gotcha: never run `aisw use` from a shell that still has `CLAUDE_CONFIG_DIR` exported — aisw
+resolves the "live" config dir from that variable, so it writes the credentials into the profile
+directory instead of `~/.claude`. Inside a Claude Code session, use
+`env -u CLAUDE_CONFIG_DIR aisw use ...`.
+
 ### Git
 
 - **`dot_gitconfig.tmpl`** — Global git configuration. Uses `.email` and `.editor` template variables (set at `chezmoi init` time).
@@ -105,7 +131,7 @@ Marketplaces and plugins are not checked in. `~/.claude/plugins` holds a few hun
 | `run_onchange_before_01_install-rust.sh` | Installs Rust toolchain via rustup |
 | `run_onchange_before_02_install-zsh.sh` | Builds zsh from source to `~/.local` if not found |
 | `run_onchange_before_03_install-binaries.sh` | Installs CLI tools to `~/.local/bin`: neovim (GitHub latest release), fzf (git clone), starship (official install.sh), herdr (official install.sh) |
-| `run_onchange_before_04_install-cargo-packages.sh` | Installs cargo-based CLI tools: ripgrep, bat, git-delta |
+| `run_onchange_before_04_install-cargo-packages.sh` | Installs cargo-based CLI tools: ripgrep, bat, git-delta, zoxide, clauth, aisw |
 | `run_onchange_before_05_install-npm-packages.sh` | Installs global npm packages: `@openai/codex` (the `codex` CLI). Sources `nvm.sh` itself, because chezmoi runs the script before `dot_zshrc` can load nvm |
 | `run_onchange_after_20_herdr-setup.sh` | Installs the herdr Claude Code integration hook and the herdr-nvim plugin (runs after apply, so `config.toml` is already in place) |
 | `run_onchange_after_21_claude-plugins.sh` | Adds the declared Claude Code marketplaces and installs the declared plugins |
