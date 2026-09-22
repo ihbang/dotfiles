@@ -68,6 +68,8 @@ New `*.zsh` files dropped into `dot_config/zsh/` are automatically sourced by `d
 
 - **`dot_config/herdr/config.toml`** — All herdr configuration: prefix and keybindings, theme, tab bar entries, and notification delivery. Keybindings are ported from the tmux config this repo used previously, so `prefix` is `ctrl+a` and a few herdr defaults are moved aside to keep the tmux keys (`edit_scrollback` and `resize_mode` are shifted to their `shift` variants).
 
+`config.toml` is the only herdr file this repo owns. The binary is installed by `run_onchange_before_03_install-binaries.sh`, and `run_onchange_after_20_herdr-setup.sh` installs the two things the config depends on: the Claude Code integration hook and the `chmarax.herdr-nvim` plugin that `prefix+e` and `prefix+o` are bound to. Neither of those is checked in, because herdr owns their contents — it rewrites the hook script on every integration version bump, and it unpacks plugins with absolute paths and a resolved commit baked in. Both checks are idempotent, so the script is safe to re-run.
+
 After editing, apply it to the running server with `herdr server reload-config`. It reports parse errors, unknown keys, and invalid keybindings as diagnostics, and answers `applied`, `partial`, or `failed` — a silent `applied` with empty diagnostics is the only result that means every entry was accepted.
 
 ### Git
@@ -96,8 +98,9 @@ After editing, apply it to the running server with `herdr server reload-config`.
 | `run_onchange_before_00_install-packages.sh` | OS package manager installs: poppler (`pdftoppm`); on macOS also GNU coreutils, so `ls` can alias to `gls` |
 | `run_onchange_before_01_install-rust.sh` | Installs Rust toolchain via rustup |
 | `run_onchange_before_02_install-zsh.sh` | Builds zsh from source to `~/.local` if not found |
-| `run_onchange_before_03_install-binaries.sh` | Installs CLI tools to `~/.local/bin`: neovim (GitHub latest release), fzf (git clone), starship (official install.sh) |
+| `run_onchange_before_03_install-binaries.sh` | Installs CLI tools to `~/.local/bin`: neovim (GitHub latest release), fzf (git clone), starship (official install.sh), herdr (official install.sh) |
 | `run_onchange_before_04_install-cargo-packages.sh` | Installs cargo-based CLI tools: ripgrep, bat, git-delta |
+| `run_onchange_after_20_herdr-setup.sh` | Installs the herdr Claude Code integration hook and the herdr-nvim plugin (runs after apply, so `config.toml` is already in place) |
 
 All tools are installed to `~/.local/bin` without sudo. New tools that fit this pattern should be added to script `03` or `04` depending on whether they install via cargo.
 

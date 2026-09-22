@@ -69,21 +69,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/home/inhyeok_bang_a2sys_ai/.claude/hooks/herdr-agent-state.sh' session",
+            "command": "bash \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/herdr-agent-state.sh\" session",
             "timeout": 10
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/wiki-match.sh\" 2>/dev/null || true",
-            "timeout": 5,
-            "statusMessage": "위키 관련 페이지 확인 중"
           }
         ]
       }

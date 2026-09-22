@@ -401,6 +401,26 @@ install_pandoc() {
   echo "pandoc installed to $INSTALL_PREFIX/bin/pandoc"
 }
 
+# ── herdr ─────────────────────────────────────────────────────────────────────
+
+install_herdr() {
+  if command -v herdr >/dev/null 2>&1; then
+    echo "herdr is already installed: $(command -v herdr)"
+    return 0
+  fi
+
+  echo "Installing herdr (latest)..."
+  # The installer reads HERDR_INSTALL_DIR and otherwise defaults to ~/.local/bin;
+  # it is passed explicitly so the binary lands under INSTALL_PREFIX regardless.
+  curl -fsSL https://herdr.dev/install.sh |
+    HERDR_INSTALL_DIR="$INSTALL_PREFIX/bin" sh || {
+    echo "herdr: install failed"
+    return 1
+  }
+
+  echo "herdr installed to $INSTALL_PREFIX/bin/herdr"
+}
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
 install_neovim
@@ -412,3 +432,4 @@ install_gh
 install_git_lfs
 install_nvm
 install_pandoc
+install_herdr

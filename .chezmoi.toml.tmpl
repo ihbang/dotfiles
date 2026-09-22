@@ -8,6 +8,6 @@ autoPush = true
 email = {{ $email | quote }}
 editor = "nvim"
 {{/* The personal wiki is not configurable: it always lives under ~/Documents, and
-     run_once_after_10_clone-wiki.sh clones it there. Kept as a data value because
-     the wiki-match hook resolves it with `chezmoi execute-template`. */ -}}
+     run_once_after_10_clone-wiki.sh clones it there. Kept as a data value so the
+     path is declared once; that script template is its only consumer. */ -}}
 wikiPath = {{ printf "%s/Documents/llm-wiki" .chezmoi.homeDir | quote }}
