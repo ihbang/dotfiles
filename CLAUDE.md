@@ -131,7 +131,7 @@ directory instead of `~/.claude`. Inside a Claude Code session, use
 | `run_onchange_before_01_install-rust.sh` | Installs Rust toolchain via rustup |
 | `run_onchange_before_02_install-zsh.sh` | Builds zsh from source to `~/.local` if not found |
 | `run_onchange_before_03_install-binaries.sh` | Installs CLI tools to `~/.local/bin`: neovim (GitHub latest release), fzf (git clone), starship (official install.sh), herdr (official install.sh) |
-| `run_onchange_before_04_install-cargo-packages.sh` | Installs cargo-based CLI tools: ripgrep, bat, git-delta, zoxide, clauth, aisw |
+| `run_onchange_before_04_install-cargo-packages.sh` | Installs cargo-based CLI tools: ripgrep, bat, git-delta, zoxide, aisw |
 | `run_onchange_before_05_install-npm-packages.sh` | Installs global npm packages: `@openai/codex` (the `codex` CLI). Sources `nvm.sh` itself, because chezmoi runs the script before `dot_zshrc` can load nvm |
 | `run_onchange_after_20_herdr-setup.sh` | Installs the herdr Claude Code integration hook and the herdr-nvim plugin (runs after apply, so `config.toml` is already in place) |
 | `run_onchange_after_21_claude-plugins.sh` | Adds the declared Claude Code marketplaces and installs the declared plugins |

@@ -1,11 +1,11 @@
 #!/bin/bash
-# Install cargo packages: ripgrep, bat, git-delta, zoxide, clauth, aisw
+# Install cargo packages: ripgrep, bat, git-delta, zoxide, aisw
 
 # Source cargo env in case it was just installed by install-rust.sh
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
 if ! command -v cargo >/dev/null 2>&1; then
-  echo "cargo not found — skipping ripgrep, bat, git-delta, zoxide, clauth, aisw"
+  echo "cargo not found — skipping ripgrep, bat, git-delta, zoxide, aisw"
   exit 0
 fi
 
@@ -24,5 +24,4 @@ install_cargo_pkg ripgrep rg
 install_cargo_pkg bat bat
 install_cargo_pkg git-delta delta
 install_cargo_pkg zoxide zoxide
-install_cargo_pkg clauth
 install_cargo_pkg aisw aisw
