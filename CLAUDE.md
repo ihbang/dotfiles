@@ -72,6 +72,12 @@ New `*.zsh` files dropped into `dot_config/zsh/` are automatically sourced by `d
 
 After editing, apply it to the running server with `herdr server reload-config`. It reports parse errors, unknown keys, and invalid keybindings as diagnostics, and answers `applied`, `partial`, or `failed` — a silent `applied` with empty diagnostics is the only result that means every entry was accepted.
 
+### Claude Code
+
+- **`dot_claude/`** — Global Claude Code config: `settings.json` (permissions, hooks, env), `CLAUDE.md` (instructions for every project), and `output-styles/fluent-korean.md`.
+
+Marketplaces and plugins are not checked in. `~/.claude/plugins` holds a few hundred megabytes of marketplace clones and plugin cache that are re-fetched from GitHub, and `installed_plugins.json` records absolute paths and commit SHAs that do not travel between machines. `run_onchange_after_21_claude-plugins.sh` declares the marketplaces and plugin ids instead and is idempotent, so adding a plugin means adding one line there. Plugins with scope `synced` come from claude.ai and are left to Claude Code; skills under `~/.claude/skills` are either symlinks into other checkouts or cloud-synced, so none of them are managed here either.
+
 ### Git
 
 - **`dot_gitconfig.tmpl`** — Global git configuration. Uses `.email` and `.editor` template variables (set at `chezmoi init` time).
@@ -101,6 +107,7 @@ After editing, apply it to the running server with `herdr server reload-config`.
 | `run_onchange_before_03_install-binaries.sh` | Installs CLI tools to `~/.local/bin`: neovim (GitHub latest release), fzf (git clone), starship (official install.sh), herdr (official install.sh) |
 | `run_onchange_before_04_install-cargo-packages.sh` | Installs cargo-based CLI tools: ripgrep, bat, git-delta |
 | `run_onchange_after_20_herdr-setup.sh` | Installs the herdr Claude Code integration hook and the herdr-nvim plugin (runs after apply, so `config.toml` is already in place) |
+| `run_onchange_after_21_claude-plugins.sh` | Adds the declared Claude Code marketplaces and installs the declared plugins |
 
 All tools are installed to `~/.local/bin` without sudo. New tools that fit this pattern should be added to script `03` or `04` depending on whether they install via cargo.
 
