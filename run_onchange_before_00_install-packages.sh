@@ -15,6 +15,16 @@ Darwin)
     echo "Installing poppler..."
     brew install poppler
   fi
+
+  # GNU ls (gls) sizes each column to its own contents; the BSD ls that ships
+  # with macOS pads every column to the longest name, so gaps look uneven.
+  # aliases.zsh prefers gls when it is present.
+  if command -v gls >/dev/null 2>&1; then
+    echo "coreutils is already installed: $(command -v gls)"
+  else
+    echo "Installing coreutils..."
+    brew install coreutils
+  fi
   ;;
 Linux)
   if command -v pdftoppm >/dev/null 2>&1; then

@@ -93,7 +93,7 @@ After editing, apply it to the running server with `herdr server reload-config`.
 
 | Script | Purpose |
 |---|---|
-| `run_onchange_before_00_install-packages.sh` | System package installation (currently empty placeholder) |
+| `run_onchange_before_00_install-packages.sh` | OS package manager installs: poppler (`pdftoppm`); on macOS also GNU coreutils, so `ls` can alias to `gls` |
 | `run_onchange_before_01_install-rust.sh` | Installs Rust toolchain via rustup |
 | `run_onchange_before_02_install-zsh.sh` | Builds zsh from source to `~/.local` if not found |
 | `run_onchange_before_03_install-binaries.sh` | Installs CLI tools to `~/.local/bin`: neovim (GitHub latest release), fzf (git clone), starship (official install.sh) |
