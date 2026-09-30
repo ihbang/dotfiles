@@ -61,13 +61,16 @@ status_indicators = "dots"
 prompt_new_tab_name = true
 
 # The Agents list hardcodes Modifier::DIM on its secondary tokens (machine, tab,
-# agent), which halves them again on top of the overlay0 lift above. Restating
-# the default rows lets each of those tokens turn the dim modifier back off.
-# state_icon and workspace are left bare because neither is dimmed to begin with.
+# agent), which halves them again on top of the overlay0 lift above, so each of
+# those tokens turns the dim modifier back off. terminal_title_stripped renders
+# in the same secondary style and gets the same treatment. state_icon and
+# workspace are left bare because neither is dimmed to begin with.
+# Compared to the default rows, machine is dropped, and the second row appends
+# the pane's terminal title (Claude Code sets it to the session topic).
 [ui.sidebar.agents]
 rows = [
-  ["state_icon", { token = "machine", dim = false }, "workspace", { token = "tab", dim = false }],
-  [{ token = "agent", dim = false }],
+  ["state_icon", "workspace", { token = "tab", dim = false }],
+  [{ token = "agent", dim = false }, { token = "terminal_title_stripped", dim = false }],
 ]
 
 [ui.toast]
