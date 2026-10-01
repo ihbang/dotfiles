@@ -16,7 +16,8 @@ this file is the agent-facing digest, reduced to what gates an action.
 - **No branch and no PR without an issue.** Every change to code — feature, fix, bug,
   refactor — starts from a GitHub Issue. If none exists, propose creating one and do not cut
   a branch until it exists. Label the issue by type (`feature`, `bug`, `refactor`, `docs`, …).
-- **Every issue joins the tracking tree** (parent Epic in `serving-team`, Serving Board fields).
+- **Every issue joins the tracking tree** (parent Epic in `serving-team`, Serving Board fields,
+  blocked-by and blocking relations).
   Creating an issue, Milestone or Epic, starting work on one, or closing one: follow
   `~/.claude/references/a2sys-issue-tracking.md`.
 - **Never push directly to `develop` or `main`.** No exceptions.

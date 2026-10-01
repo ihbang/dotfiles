@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # PreToolUse(Bash): when a Bash call creates an issue in an a2sys-platform repository,
-# inject the issue-tracking rules so the new issue is attached to its Epic and board fields.
+# inject the issue-tracking rules so the new issue gets its Epic, board fields and dependencies.
 #
 # Matches `gh issue create`, and `gh api` POSTs to the create endpoint (`.../issues` followed
 # by a title or an --input body). Reads/sub-issue calls (`.../issues/<n>/...`, `?query`) pass.
@@ -22,4 +22,4 @@ targets_a2sys() {
 creates_issue && targets_a2sys || exit 0
 
 jq -Rs '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext:
-  ("[A2SYS tracking] creating an issue: attach it to its Epic and set its Serving Board fields. Full text: ~/.claude/references/a2sys-issue-tracking.md\n" + .)}}' "$doc"
+  ("[A2SYS tracking] creating an issue: attach it to its Epic, set its Serving Board fields, and set its blocked-by/blocking relations. Full text: ~/.claude/references/a2sys-issue-tracking.md\n" + .)}}' "$doc"

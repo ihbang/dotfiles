@@ -52,6 +52,36 @@ fails on it, ask the user to run `! gh auth refresh -h github.com -s project`.
 | Sprint | 1-week iterations starting Monday. Set only to a sprint the user names. |
 | Workstream / Component | Set when an existing option plainly fits (the Workstream options are OpenRouter's). Priority and Effort have no options; leave them. |
 
+## Dependencies (blocked by / blocking)
+
+Set a new issue's GitHub issue dependencies when it is created, together with its parent and
+board fields.
+
+- **Hard dependencies only.** Use `blocked by` when the issue cannot proceed, or cannot close,
+  until the other issue closes. A preferred order goes in the body as prose, not as a relation.
+  "Fewer conflicts if #N merges first" and "better after the split" are examples.
+- **Building on unmerged work is a hard dependency.** An issue may change code that so far
+  exists only in an open PR, or its background may cite that PR as the base it builds on. It is
+  then blocked by that PR's issue, even when its body never says "wait".
+- **Both directions.** Record what the new issue waits on, and also what already-open issues wait
+  on it.
+- **Where to look.** Read the bodies, not only the titles, of every open issue in the
+  repository the new issue lives in, including issues with no PR. Also check the parent Epic's
+  other children and any issue the body names. Search other repositories only when the body
+  names one of their issues.
+- **API** (REST). `issue_id` is the blocker's database `.id`, not its number. Cross-repository
+  blockers work.
+  - add: `POST repos/<o>/<r>/issues/<blocked>/dependencies/blocked_by -F issue_id=<id>`
+  - read: `GET .../dependencies/blocked_by`, `GET .../dependencies/blocking`
+  - remove: `DELETE .../dependencies/blocked_by/<id>`
+- **A pull request cannot be the blocker.** The API answers 422 "Target issue may only be an
+  issue". Block on the issue the PR will close, if its `closingIssuesReferences` lists one. That
+  list holds keyword links and links made from the PR's Development sidebar. If the PR closes
+  nothing, write the wait into the body (`선행: #N 머지`).
+- **Blocker not created yet**, e.g. an issue in a repository that does not exist yet: write the
+  pending edge into the issue or Epic body, and add the relation once the blocker exists.
+- A relation shows on both issues. When one lands on an issue someone else owns, tell the user.
+
 ## Creating a work issue
 
 1. Find the parent Epic among serving-team's open Epics. None fits → propose the Epic (and
@@ -61,15 +91,18 @@ fails on it, ask the user to run `! gh auth refresh -h github.com -s project`.
    sub_issue_id=<id>`, where `<id>` is the REST `.id` of the issue (the database id, not its
    number).
 4. On the board: Project = the parent's value, Status, and dates per the table.
+5. Set its dependencies (§ Dependencies).
 
 Done when one GraphQL read-back shows parent, type, `team:serving`, assignee, Project and
-Status all set.
+Status all set, and the dependency read-back (`blocked_by`, `blocking`) shows the intended
+edges.
 
 ## Creating a Milestone or Epic
 
 Create it via REST with `"type": "Milestone"` / `"Epic"` and the template body, attach an Epic
-to its Milestone, then set Project, Status, Start date and Target date. Done when the read-back
-shows the type, the parent and all four fields.
+to its Milestone, then set Project, Status, Start date and Target date. When an Epic waits on
+another Epic, set that dependency too (§ Dependencies). Done when the read-back shows the type,
+the parent, all four fields, and any dependency.
 
 ## Opening a PR
 
@@ -88,5 +121,7 @@ shows the type, the parent and all four fields.
 
 - Closed as completed → `Done`. Every child of its Epic closed → propose closing the Epic;
   closing a Milestone or Epic is the user's call.
+- After a close, read what the issue was blocking (`GET .../dependencies/blocking`). Tell the
+  user which issues no longer have an open blocker.
 - An issue closed as not planned or duplicate stays out of the tree: a closed sub-issue counts
   toward the Epic's progress whatever the close reason.
