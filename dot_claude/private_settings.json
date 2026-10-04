@@ -39,6 +39,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "opus",
   "hooks": {
     "Notification": [
       {
@@ -193,7 +194,7 @@
   },
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-ansi",
-  "autoCompactEnabled": false,
+  "autoCompactEnabled": true,
   "wheelScrollAccelerationEnabled": false,
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
@@ -226,6 +227,5 @@
       "**Trusted repo**: /home/inhyeok_bang_a2sys_ai/Workspace/a2sys (no remotes configured; working directory is the sole trust anchor)",
       "**Org-specific CLIs**: None configured — evidence shows several non-standard tools in shell history (aisw, herdr, clauth, ccaccount, ccauth, chezmoi) but none corroborated as routine within this project's transcripts, so left at default"
     ]
-  },
-  "model": "opus"
+  }
 }
