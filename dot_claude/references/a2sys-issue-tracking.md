@@ -47,8 +47,9 @@ fails on it, ask the user to run `! gh auth refresh -h github.com -s project`.
 | Field | Rule |
 |---|---|
 | Project | One value per Milestone tree: the Milestone, its Epics and their work issues share it, whatever repository each lives in. A new option needs the user's approval; add it with `updateProjectV2Field`, passing every existing option with its `id` (options sent without ids drop the values already set on items). |
-| Status | New issue: `Backlog`, or `Todo` once it has a Sprint. Branch cut or PR opened: `In Progress`. Waiting on someone outside the work: `Blocked`, with a comment naming the wait. Closed as completed: `Done`. `In Review` follows marking a PR ready, which is the user's action; set it when the user does so. Milestone/Epic: `In Progress` when its first child goes In Progress. |
+| Status | New issue: `Backlog`, or `Todo` once it has a Sprint. Branch cut or PR opened: `In Progress`. Gains an open blocker: `Blocked`, and back to the Status recorded in `Status before Blocked` (`Todo` when empty) once its last open blocker closes or its relation is removed (§ Dependencies). Waiting on someone outside the work: `Blocked`, with a comment naming the wait. Closed as completed: `Done`. `In Review` follows marking a PR ready, which is the user's action; set it when the user does so. Milestone/Epic: `In Progress` when its first child goes In Progress. |
 | Start date / Target date | Milestone and Epic: both, always (the 로드맵 view shows only these two types). Target = the deadline in `달성 기준` or one the user gives; with neither, ask. Start = the planned start the user gives, else the day the first child goes In Progress. Work issue: Start = the day it goes In Progress; Target only when the user or the parent sets one. |
+| Status before Blocked | Text field `PVTF_lADOEUH-BM4Bk1U-zhkGPrc`, shown in no view (added 2026-10-01, user). Holds the Status an issue had when a blocker made it `Blocked`; § Dependencies writes, reads and clears it. Write with `updateProjectV2ItemFieldValue` (`value: {text: "In Progress"}`), clear with `clearProjectV2ItemFieldValue`, read through `fieldValueByName(name: "Status before Blocked") { ... on ProjectV2ItemFieldTextValue { text } }`. GitHub keeps no Status history (no timeline event), so this field is the only record. |
 | Sprint | 1-week iterations starting Monday. Set only to a sprint the user names. |
 | Workstream / Component | Set when an existing option plainly fits (the Workstream options are OpenRouter's). Priority and Effort have no options; leave them. |
 
@@ -65,6 +66,15 @@ board fields.
   then blocked by that PR's issue, even when its body never says "wait".
 - **Both directions.** Record what the new issue waits on, and also what already-open issues wait
   on it.
+- **Status follows open blockers.** An issue that gains an open blocker goes `Blocked`, whatever
+  its Status was. That includes an already-open issue the new issue now blocks. Before setting
+  it, write the current Status into `Status before Blocked`; a new issue records the Status it
+  would have had without the blocker (`Backlog`, or `Todo` with a Sprint). An issue already
+  `Blocked` keeps its recorded value. When a blocker closes or its relation is removed, read the
+  issue's `blocked_by`: no open blocker left → the recorded Status, or `Todo` when the field is
+  empty, then clear the field; one still open → it stays `Blocked`. Adding an already-closed
+  blocker changes nothing. Issues that already had an open blocker on 2026-10-01 keep their
+  Status (user); the rule acts on them only at their next blocker change.
 - **Where to look.** Read the bodies, not only the titles, of every open issue in the
   repository the new issue lives in, including issues with no PR. Also check the parent Epic's
   other children and any issue the body names. Search other repositories only when the body
@@ -80,7 +90,40 @@ board fields.
   nothing, write the wait into the body (`선행: #N 머지`).
 - **Blocker not created yet**, e.g. an issue in a repository that does not exist yet: write the
   pending edge into the issue or Epic body, and add the relation once the blocker exists.
-- A relation shows on both issues. When one lands on an issue someone else owns, tell the user.
+- A relation shows on both issues. When one lands on an issue someone else owns, tell the user,
+  including any Status change it causes there.
+
+## References in issue, PR and comment text
+
+Applies to every issue or PR body, comment, review comment and reply, whether created or edited.
+
+- A bare `#N` resolves to the repository the text lives in. An issue in any other repository is
+  `a2sys-platform/<repo>#N`; `<repo>#N` without the owner renders as plain text.
+- Leave a space between a reference and a Korean particle: `#71 의`, not `#71의`. A number with
+  a Hangul character glued to it does not link.
+- `#` before a number means an issue or PR, nothing else. Write review points, steps and list
+  items as `4번` or `항목 4`.
+- A verbatim quote (README line, log output, commit message) goes in a code span or fenced
+  block, byte for byte. It links nothing there, and no later link fix has to alter it.
+- Before editing an existing text, check each reference already in it against what its sentence
+  means. A wrong one is fixed in the same edit, never carried forward.
+- After every write, read the rendered links back: `gh api <path> -H "Accept:
+  application/vnd.github.html+json" --jq .body_html`, then list the `href`s. Each must be the
+  intended repository and number.
+
+## Transferring an issue
+
+GitHub rewrites other texts that reference the moved issue. On 2026-10-01, moving serving-team#84
+to job-launcher#2 rewrote the two model-profiler bodies that cited it: their bare `#N` became
+`a2sys-platform/serving-team#N`, with no edit recorded, and PR model-profiler#71 got linked to
+serving-team#35.
+
+- Before: list the texts that reference the issue (`cross-referenced` events in `GET
+  .../issues/<n>/timeline`, plus any text you know cites it).
+- After: read each one back and restore every reference the transfer re-qualified
+  (§ References). For a PR among them, re-check its closing links (§ Opening a PR).
+- Then read back the moved issue's parent, board item, type and dependencies; GitHub's docs do
+  not promise to keep them.
 
 ## Creating a work issue
 
@@ -91,18 +134,22 @@ board fields.
    sub_issue_id=<id>`, where `<id>` is the REST `.id` of the issue (the database id, not its
    number).
 4. On the board: Project = the parent's value, Status, and dates per the table.
-5. Set its dependencies (§ Dependencies).
+5. Set its dependencies (§ Dependencies), then the Status they call for: `Blocked`, after
+   writing `Status before Blocked`, on the new issue if it has an open blocker and on every open
+   issue it now blocks.
 
 Done when one GraphQL read-back shows parent, type, `team:serving`, assignee, Project and
-Status all set, and the dependency read-back (`blocked_by`, `blocking`) shows the intended
-edges.
+Status all set, the dependency read-back (`blocked_by`, `blocking`) shows the intended
+edges, every issue those edges leave with an open blocker reads `Blocked`, each one this
+procedure turned `Blocked` has `Status before Blocked` set, and the body's rendered links are
+the intended ones (§ References).
 
 ## Creating a Milestone or Epic
 
 Create it via REST with `"type": "Milestone"` / `"Epic"` and the template body, attach an Epic
 to its Milestone, then set Project, Status, Start date and Target date. When an Epic waits on
 another Epic, set that dependency too (§ Dependencies). Done when the read-back shows the type,
-the parent, all four fields, and any dependency.
+the parent, all four fields, any dependency, and the body's intended links (§ References).
 
 ## Opening a PR
 
@@ -112,7 +159,9 @@ the parent, all four fields, and any dependency.
   - a PR that does part of it carries `Refs #N`, and the last one carries `Closes #N`;
   - a PR stacked on another feature branch cannot link; the PR that lands in the default branch
     carries the keyword.
-- Verify with `gh pr view <n> --json closingIssuesReferences`. Empty despite the keyword →
+- Verify with GraphQL `pullRequest(number:<n>) { closingIssuesReferences(first:10) { nodes {
+  number repository { nameWithOwner } } } }`. The number alone cannot tell `model-profiler#35`
+  from `serving-team#35`; a wrong repository is fixed in the body. Empty despite the keyword →
   PATCH the byte-identical body (`gh api .../pulls/<n> --jq .body | head -c -1` → `jq
   --rawfile`) so GitHub parses it again; confirm the body hash is unchanged.
 - The issue goes `In Progress`, with its Start date if unset.
@@ -121,7 +170,8 @@ the parent, all four fields, and any dependency.
 
 - Closed as completed → `Done`. Every child of its Epic closed → propose closing the Epic;
   closing a Milestone or Epic is the user's call.
-- After a close, read what the issue was blocking (`GET .../dependencies/blocking`). Tell the
-  user which issues no longer have an open blocker.
+- After a close, read what the issue was blocking (`GET .../dependencies/blocking`). Each one
+  with no open blocker left goes back to its `Status before Blocked` (`Todo` when empty) and the
+  field is cleared (§ Dependencies); tell the user which ones and what each went back to.
 - An issue closed as not planned or duplicate stays out of the tree: a closed sub-issue counts
   toward the Epic's progress whatever the close reason.

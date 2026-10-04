@@ -81,6 +81,17 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Uncommitted work in the primary checkout does not carry over. Say so, let the user decide.
 - Cleanup is the user's call. Never call `ExitWorktree` proactively.
 
+## 6. Comments and Docstrings
+
+**Names carry the meaning. A comment adds only what the code cannot show.**
+
+- Name variables, functions and types so the code reads without comments.
+- Don't explain in a comment or docstring what the code already makes clear.
+- Say each thing once; don't repeat the same explanation in several places.
+- When code is removed, remove its comments. Don't describe code that no longer exists, why it
+  was removed included, unless a reader would otherwise get it wrong.
+- Applies to what I write. Existing comments stay (§3) unless my change makes them false.
+
 ## Language of what I write
 
 Three rules, in priority order.
@@ -116,45 +127,23 @@ title is governed by the Conventional Commits rule, the body by rule 2.
 
 Applies to **file content only** — conversation stays in the user's language.
 
-## Never commit the `## Agent skills` block in CLAUDE.md
+## Terminology and wording
 
-Every repo's `CLAUDE.md` may end with an `## Agent skills` section — the per-repo config
-written by `mattpocock-skills:setup-matt-pocock-skills` (issue-tracker / triage-labels /
-domain-docs pointers into `docs/agents/`). **That section is local-only. It must never enter
-a commit, on any project.**
+Applies to everything I write: replies, docs, slides, commit messages, issue and PR text.
 
-Rules:
-
-- Never `git add` / `git commit` a `CLAUDE.md` diff whose only change is that block, or any
-  part of it. If the block is the only change, leave `CLAUDE.md` modified — a permanently
-  dirty `CLAUDE.md` is the intended steady state, not a problem to clean up.
-- When `CLAUDE.md` has *other* changes that do belong in the commit, stage a copy with the
-  block stripped, then restore the local file (interactive `git add -p` is unavailable):
-
-  ```bash
-  cp CLAUDE.md /tmp/CLAUDE.local.md                 # keep the local copy (with the block)
-  sed -i '/^## Agent skills$/,$d' CLAUDE.md         # strip block .. EOF from the staged version
-  printf '%s\n' "$(cat CLAUDE.md)" > CLAUDE.md      # drop the trailing blank line the strip leaves
-  git add CLAUDE.md && git commit -m "..."
-  cp /tmp/CLAUDE.local.md CLAUDE.md                 # restore the block locally
-  ```
-
-  Verified round-trip: without the `printf` step the stripped file differs from the committed
-  version by exactly one trailing blank line.
-- `docs/agents/` (the files the block points at) is local-only too. Keep it out of the repo
-  via `.git/info/exclude`, **not** `.gitignore` — the exclude file is itself uncommitted, so
-  the team's ignore list stays untouched:
-
-  ```bash
-  printf '\n# mattpocock-skills per-repo config (local-only)\n/docs/agents/\n' >> .git/info/exclude
-  ```
-
-  `.gitignore` cannot cover `CLAUDE.md` anyway (ignore rules apply to untracked files only),
-  which is why the block needs the staging workaround above while `docs/agents/` needs a
-  plain exclude entry.
-- Never suggest deleting the block instead of excluding it — the skills read it at runtime.
-- If a repo already has the block committed (inherited from someone else), leave it alone;
-  this rule governs commits *I* make, not history rewrites.
-- Alternative when a repo wants zero `CLAUDE.md` churn: move the block into a git-ignored
-  file (e.g. `CLAUDE.local.md`) and reference it from `CLAUDE.md` with an `@CLAUDE.local.md`
-  import line — do this only when the user asks for it.
+- Technical terms stay in their original form: each project's official term as written, and
+  terms the industry uses in English (KV cache, continuous batching, attention). Never a Korean
+  rendering. For these terms this overrides the output style's preference for settled Korean
+  translations.
+- When two projects name the same behavior differently, give both names and say they are the
+  same behavior (vLLM `preemption`, SGLang `retraction`).
+- Refer to a technical object by its name, not a metaphor or a broad word: `KV cache pool`
+  (the space) or `가용 공간` (the amount still allocatable), not `자리`.
+- Labels and headings use literal words, not metaphors: `오늘의 주제`, not `오늘의 지도`.
+- A verb carries its object and names the actual operation: `KV block을 할당한다`, not
+  `할당한다`; `입력이 들어갈 가용 공간이 있는지 확인한다`, not `센다`.
+- One concept, one term, throughout a deck, document, or conversation.
+- Name a state with a noun (`보호`), not an adjective (`보호된`). A name grouping several steps
+  reuses the steps' name (steps named `조회` → group named `조회`).
+- Acronyms in uppercase (FCFS, LPM, TTFT, ITL). A string used verbatim in code or config keeps
+  its spelling (`scheduling_policy: fcfs`).

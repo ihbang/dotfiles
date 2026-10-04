@@ -18,8 +18,8 @@ this file is the agent-facing digest, reduced to what gates an action.
   a branch until it exists. Label the issue by type (`feature`, `bug`, `refactor`, `docs`, …).
 - **Every issue joins the tracking tree** (parent Epic in `serving-team`, Serving Board fields,
   blocked-by and blocking relations).
-  Creating an issue, Milestone or Epic, starting work on one, or closing one: follow
-  `~/.claude/references/a2sys-issue-tracking.md`.
+  Creating an issue, Milestone or Epic, starting work on one, adding or removing a blocked-by
+  relation, or closing one: follow `~/.claude/references/a2sys-issue-tracking.md`.
 - **Never push directly to `develop` or `main`.** No exceptions.
 
 ## Branches
@@ -43,8 +43,8 @@ defaults except in two places: the production branch is `main`, and bug fixes us
 
 - **Title follows [Conventional Commits](https://www.conventionalcommits.org)** — `feat`,
   `fix`, `docs`, `refactor`, `test`, `chore`. The branch prefix (`feature/`) and the commit
-  type (`feat:`) are different words. `feature/*` → `develop` is a squash merge, so **the PR
-  title becomes the single commit line on `develop`**.
+  type (`feat:`) are different words. Every PR from a work branch into `develop` is a squash
+  merge, so **the PR title becomes the single commit line on `develop`**.
 - **Always open as a DRAFT** (`gh pr create --draft`). Marking it ready for review is the
   user's action, not mine — never open a non-draft PR and never flip one to ready, even when
   the work looks finished and CI is green. Opening as draft is a hard rule, not a default to
@@ -52,7 +52,7 @@ defaults except in two places: the production branch is `main`, and bug fixes us
   name is on it.
 - **Body**: follow the repository's `.github/pull_request_template.md`. If there is none, use
   What / Why (`Closes #N`) / How / How tested / checklist (self-review, tests added or
-  updated, CI green, docs updated).
+  updated, CI green, docs updated). References in it follow § Issue and PR text.
 - **Link the issue and move it on the board**: `Closes #N` only on the PR that finishes the
   issue, then verify the link and set the issue `In Progress` —
   `~/.claude/references/a2sys-issue-tracking.md` § Opening a PR.
@@ -70,7 +70,7 @@ defaults except in two places: the production branch is `main`, and bug fixes us
 
 | Path | Method |
 |---|---|
-| `feature/*` → `develop` | **Squash merge** |
+| any work branch (`feature/*`, `fix/*`, `chore/*`, …) → `develop` | **Squash merge**. Confluence names only `feature/*`, as an example (user, 2026-10-01). |
 | `develop` → `main` | Plain merge (merge commit) |
 | `hotfix/*` → `main` | Plain merge (merge commit) |
 | `main` → `develop` (back-merge) | Plain merge (merge commit) |
@@ -78,6 +78,16 @@ defaults except in two places: the production branch is `main`, and bug fixes us
 Squashing or rebasing on any `main`-related path leaves the same fix as different commits on
 `main` and `develop`, which then conflicts at the next release merge. CI is a required status
 check, so a red build blocks the merge button.
+
+## Issue and PR text
+
+Writing or editing any issue or PR body, comment or review reply, or transferring an issue:
+follow `~/.claude/references/a2sys-issue-tracking.md` § References and § Transferring an issue.
+The two rules most often broken:
+
+- Another repository's issue is `a2sys-platform/<repo>#N`. A bare `#N` means the repository
+  the text lives in.
+- A Korean particle after a reference gets a space: `#71 의`, not `#71의`.
 
 ## Applying these
 
