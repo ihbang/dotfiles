@@ -5,3 +5,13 @@ CLAUDE.md
 **/fish_variables
 
 **/*.swp
+
+# Codex reads $CODEX_HOME/AGENTS.md; link the shared instructions only into aisw profiles that exist
+{{- range list "share" "personal" }}
+{{- if not (stat (joinPath $.chezmoi.homeDir ".aisw/profiles/codex" .)) }}
+.aisw/profiles/codex/{{ . }}
+{{- end }}
+{{- end }}
+{{- if not (stat (joinPath .chezmoi.homeDir ".aisw")) }}
+.aisw
+{{- end }}
