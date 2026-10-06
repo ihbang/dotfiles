@@ -24,6 +24,8 @@ export CPPFLAGS="-I$HOME/.local/include -I$HOME/.local/include/ncursesw $CPPFLAG
 export LDFLAGS="-L$HOME/.local/lib $LDFLAGS"
 export TERMINFO="$HOME/.local/share/terminfo"
 export TERMINFO_DIRS="$HOME/.local/share/terminfo:/usr/share/terminfo"
+# Temp files go to /data: the root disk (/tmp) is small and shared.
+[ -d /data/inhyeok/tmp ] && export TMPDIR=/data/inhyeok/tmp
 
 # change shell to zsh if available and not already in zsh
 zsh_path=$(command -v zsh 2>/dev/null)
