@@ -121,7 +121,9 @@
     "code-review@claude-plugins-official": true,
     "eli5@claude-community": true,
     "example-skills@anthropic-agent-skills": true,
-    "claude-obsidian@agricidaniel-claude-obsidian": true
+    "claude-obsidian@agricidaniel-claude-obsidian": true,
+    "attention-span@attention-span": true,
+    "antislop@anti-slop": true
   },
   "extraKnownMarketplaces": {
     "a2sys-claude": {
@@ -165,10 +167,22 @@
         "source": "github",
         "repo": "AgriciDaniel/claude-obsidian"
       }
+    },
+    "attention-span": {
+      "source": {
+        "source": "github",
+        "repo": "alexgreensh/attention-span"
+      }
+    },
+    "anti-slop": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/miqdadbadjuber/anti-slop.git"
+      }
     }
   },
   "outputStyle": "fluent-korean",
-  "language": "Korean",
+  "language": "English",
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
@@ -192,6 +206,7 @@
       "effortLevel": "xhigh"
     }
   },
+  "timeFormat": "auto",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-ansi",
   "autoCompactEnabled": true,
