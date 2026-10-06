@@ -181,8 +181,8 @@
       }
     }
   },
-  "outputStyle": "attention-span:Attention-kind",
-  "language": "English",
+  "outputStyle": "fluent-korean",
+  "language": "Korean",
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,

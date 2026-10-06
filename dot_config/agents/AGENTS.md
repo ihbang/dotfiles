@@ -101,18 +101,17 @@ new file. A repo's stated convention counts as "already there" (model-profiler, 
 "Code comments in English; user-facing docs (README) in Korean"). Never translate surrounding
 content as a side effect of an edit — that is not a surgical change.
 
-### 2. New prose — Korean when shared with others, English otherwise
+### 2. New prose/markdown — Korean by default, English only when agent-only
 
-- **Korean** — anything written for people other than the user to read: README, `docs/`,
-  `CONTEXT.md`, a repo's own `CLAUDE.md` or `AGENTS.md`, ADRs, hand-off notes, slides,
-  PR/issue bodies and templates. A draft of one shown in conversation is Korean too.
-- **English** — everything else: replies to the user (even when they write in Korean), plans
-  only the user reviews, and files that exist *only* so an agent can read them: this file,
-  anything under `~/.claude/` or `~/.codex/` (`rules/`, auto-memory in `projects/*/memory/`),
-  scratchpad working notes, `docs/agents/`, skill definitions.
+- **English** — files that exist *only* so an agent can read them: this file, anything under
+  `~/.claude/` or `~/.codex/` (`rules/`, auto-memory in `projects/*/memory/`), scratchpad
+  working notes, `docs/agents/`, skill definitions.
+- **Korean** — everything else, i.e. anything a human reads or edits: README, `docs/`,
+  `CONTEXT.md`, a repo's own `CLAUDE.md` or `AGENTS.md`, ADRs, plans, hand-off notes, PR/issue bodies and
+  templates.
 
-A file that serves both audiences (a repo `CLAUDE.md` or `AGENTS.md`) counts as shared — write
-Korean.
+A file that serves both audiences (a repo `CLAUDE.md` or `AGENTS.md`, a plan the user reviews) is **not**
+agent-only — write Korean.
 
 ### 3. Inside source code — English, everything
 
@@ -124,9 +123,11 @@ language that repo's docs are in.
 Subject and body both, in every repository. PR titles and bodies are not covered here: the
 title is governed by the Conventional Commits rule, the body by rule 2.
 
+Applies to **file content only** — conversation stays in the user's language.
+
 ## Terminology and wording
 
-Applies to everything I write in Korean: docs, slides, issue and PR text.
+Applies to everything I write in Korean: replies, docs, slides, issue and PR text.
 
 - Technical terms stay in their original form: each project's official term as written, and
   terms the industry uses in English (KV cache, continuous batching, attention). Never a Korean
