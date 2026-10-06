@@ -181,7 +181,7 @@
       }
     }
   },
-  "outputStyle": "fluent-korean",
+  "outputStyle": "attention-span:Attention-kind",
   "language": "English",
   "sandbox": {
     "enabled": true,
