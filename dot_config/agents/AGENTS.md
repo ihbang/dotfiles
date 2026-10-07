@@ -90,6 +90,16 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
   was removed included, unless a reader would otherwise get it wrong.
 - Applies to what I write. Existing comments stay (§3) unless my change makes them false.
 
+## 7. llm-wiki: One Checkpoint per Transaction
+
+**Every claude-obsidian transaction applied to `~/Documents/llm-wiki` gets its own Git checkpoint.**
+
+- Checkpoint right after the apply, before any other vault write:
+  `claude-obsidian checkpoint <operation_id>`. One per transaction, in apply order, fix
+  transactions included.
+- Apply onto a clean vault only. Uncommitted changes mean a pending checkpoint: run it first, or
+  ask the user when the changes did not come from a transaction.
+
 ## Language of what I write
 
 Three rules, in priority order.

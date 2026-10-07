@@ -100,6 +100,28 @@
             "statusMessage": "이슈 관리 규정 확인 중"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/llm-wiki-checkpoint.sh\" pre",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/llm-wiki-checkpoint.sh\" post",
+            "timeout": 10
+          }
+        ]
       }
     ]
   },
