@@ -78,6 +78,12 @@ After editing, apply it to the running server with `herdr server reload-config`.
 
 Marketplaces and plugins are not checked in. `~/.claude/plugins` holds a few hundred megabytes of marketplace clones and plugin cache that are re-fetched from GitHub, and `installed_plugins.json` records absolute paths and commit SHAs that do not travel between machines. `run_onchange_after_21_claude-plugins.sh` declares the marketplaces and plugin ids instead and is idempotent, so adding a plugin means adding one line there. Plugins with scope `synced` come from claude.ai and are left to Claude Code; skills under `~/.claude/skills` are either symlinks into other checkouts or cloud-synced, so none of them are managed here either.
 
+### Codex
+
+- **`.chezmoitemplates/codex-config.py`** — Modify script that sets `status_line` and `status_line_use_colors` under `[tui]` in Codex's `config.toml` and passes every other line through, because Codex writes project trust levels and hook hashes into the same file. `dot_codex/modify_private_config.toml.tmpl` and the two aisw Codex profiles under `private_dot_aisw/` each include it, so all three Codex homes get the same status line.
+
+Codex has no command-based status line like Claude Code's `statusLine.command`; `tui.status_line` takes built-in item ids only, so the list is the closest match to `awesome-statusline.sh`. Items the server or repo does not report (e.g. `five-hour-limit` on a weekly-only plan) are omitted at render time. A change made through Codex's `/statusline` is reverted by the next `chezmoi apply`, so edit the list in the script instead.
+
 ### Account Switching (aisw)
 
 `aisw` switches which Claude Code / Codex account is active. It is installed by
