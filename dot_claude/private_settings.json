@@ -209,6 +209,7 @@
     }
   },
   "timeFormat": "auto",
+  "timeZone": "Asia/Seoul",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-ansi",
   "autoCompactEnabled": true,
