@@ -145,7 +145,6 @@
     "code-review@claude-plugins-official": true,
     "eli5@claude-community": true,
     "example-skills@anthropic-agent-skills": true,
-    "claude-obsidian@agricidaniel-claude-obsidian": true,
     "attention-span@attention-span": true,
     "antislop@anti-slop": true
   },
@@ -184,12 +183,6 @@
       "source": {
         "source": "github",
         "repo": "anthropics/claude-plugins-community"
-      }
-    },
-    "agricidaniel-claude-obsidian": {
-      "source": {
-        "source": "github",
-        "repo": "AgriciDaniel/claude-obsidian"
       }
     },
     "attention-span": {
